@@ -10,8 +10,8 @@
 #define TILE_WIDTH 64
 #define MAX_TEXTURES 1
 
-const int screen_width = 1800;
-const int screen_height = 900;
+const int screen_width = 1792;
+const int screen_height = 896;
 const int key = 0;
 
 typedef enum GameScreen{ 
@@ -146,7 +146,7 @@ int main(void) {
                 
                             switch (tiles[y][x].type) {
                                 case FLOOR:
-                                    texture_index_x = 1;
+                                    texture_index_x = 15;
                                     texture_index_y = 1;
                                     break;
                                 case WALL:
