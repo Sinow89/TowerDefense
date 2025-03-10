@@ -1,0 +1,12 @@
+{
+    "configurations": [
+                {
+            "cwd": "${workspaceFolder}",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "name": "Launch MyGame",
+            "program": "${workspaceFolder}/MyGame.exe",
+            "preLaunchTask": "C/C++: zig.exe build active file"
+        }      
+    ]
+}
