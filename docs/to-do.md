@@ -4,5 +4,5 @@
 - Start with have enmey moving towards the towers and damaging them and they break after x amount of dmg.
 - Have a base which is your main health, if the base "dies" then game over.
 - Priority, the enemys moves towards the towers first, and then towards the base. Maybe have like a radius on tower.
-- Use the gamestate/menu setup from previous projects.
-- Use tilemap setup from previous projects.
+- ~~Use the gamestate/menu setup from previous projects.~~
+- ~~Use tilemap setup from previous projects.~~

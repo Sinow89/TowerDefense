@@ -6,8 +6,8 @@
 
 #define MAP_HEIGHT 45
 #define MAP_WIDTH 90
-#define TILE_HEIGHT 8
-#define TILE_WIDTH 8
+#define TILE_HEIGHT 64
+#define TILE_WIDTH 64
 #define MAX_TEXTURES 1
 
 const int screen_width = 1800;
@@ -20,6 +20,14 @@ typedef enum GameScreen{
     GAMEPLAY,
     ENDING
 } GameScreen;
+
+typedef struct player_t{
+    Vector2 position;
+    Vector2 size;
+    Vector2 velocity;
+    int hp;
+    int key;
+} player_t;
 
 typedef enum tiles_type{
     FLOOR,
@@ -46,8 +54,8 @@ tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 void create_tiles(){
     for (int y = 0; y < MAP_HEIGHT; y++){
         for (int x = 0; x < MAP_WIDTH; x++){
-            tiles[y][x].position.y = y * 20;
-            tiles[y][x].position.x = x * 20;
+            tiles[y][x].position.y = y * 64;
+            tiles[y][x].position.x = x * 64;
             tiles[y][x].type = FLOOR;
         }
     }
@@ -65,7 +73,8 @@ int main(void) {
 
     int frames_counter = 0; 
 
-    Image image = LoadImage("assets/colored_tilemap_packed.png");
+    // Image image = LoadImage("assets/colored_tilemap_packed.png");
+    Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
   
     while (!WindowShouldClose()) { 
@@ -138,8 +147,8 @@ int main(void) {
                 
                             switch (tiles[y][x].type) {
                                 case FLOOR:
-                                    texture_index_x = 4;
-                                    texture_index_y = 4;
+                                    texture_index_x = 1;
+                                    texture_index_y = 1;
                                     break;
                                 case WALL:
                                     texture_index_x = 1;
@@ -173,8 +182,8 @@ int main(void) {
                             Rectangle dest = {
                                 (float)(tiles[y][x].position.x),
                                 (float)(tiles[y][x].position.y),
-                                20,
-                                20
+                                64,
+                                64
                             };
                 
                             Vector2 origin = {0, 0};
