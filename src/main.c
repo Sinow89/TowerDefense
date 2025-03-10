@@ -67,16 +67,21 @@ int main(void) {
     create_tiles();
 
     InitWindow(screen_width, screen_height, "Tower Defense");
-    SetTargetFPS(60);
+    SetTargetFPS(120);
 
     GameScreen current_screen = GAMEPLAY;
+    Vector2 enemy_pos = {200,200};
 
-    int frames_counter = 0; 
+    int frames_counter = 0;
+    float speed = 2.0f;
 
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
   
     while (!WindowShouldClose()) { 
+
+        float delta_time = GetFrameTime();
+        
 
         switch (current_screen)
         {
@@ -187,6 +192,20 @@ int main(void) {
                 
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+
+                            Vector2 player_position = GetMousePosition();
+
+                            Vector2 size = {64, 64};
+                            player_position.x -= size.x / 2;
+                            player_position.y -= size.y / 2;
+                         
+                            // enemy_pos = Vector2Normalize(enemy_pos);
+                            enemy_pos = Vector2Lerp(enemy_pos, player_position, 0.000001f);
+
+                            DrawRectangleV(player_position, size, GREEN);
+
+                            DrawRectangleV(enemy_pos, size, RED);
+                            
                         }
                     }
 
