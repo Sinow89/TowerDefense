@@ -43,14 +43,30 @@ typedef struct tiles_t{
 
 tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 
+void create_tiles(){
+    for (int y = 0; y < MAP_HEIGHT; y++){
+        for (int x = 0; x < MAP_WIDTH; x++){
+            tiles[y][x].position.y = y * 20;
+            tiles[y][x].position.x = x * 20;
+            tiles[y][x].type = FLOOR;
+        }
+    }
+};
+
+
 int main(void) {
 
-    InitWindow(screen_width, screen_height, "Raylib Window");
+    create_tiles();
+
+    InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
 
-    GameScreen current_screen = LOGO;
+    GameScreen current_screen = GAMEPLAY;
 
     int frames_counter = 0; 
+
+    Image image = LoadImage("assets/colored_tilemap_packed.png");
+    textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
   
     while (!WindowShouldClose()) { 
 
