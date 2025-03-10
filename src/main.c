@@ -61,19 +61,35 @@ void create_tiles(){
     }
 };
 
+Vector2 move_towards_player(Vector2 enemy_pos, Vector2 target_pos, float speed, float delta_time) {
+    Vector2 direction = Vector2Subtract(target_pos, enemy_pos);
+    float distance = Vector2Length(direction);
+
+    if (distance > 0) {
+        direction = Vector2Normalize(direction);
+        float move_distance = speed * delta_time;
+
+        if (move_distance > distance) {
+            return target_pos;
+        } else {
+            return Vector2Add(enemy_pos, Vector2Scale(direction, move_distance));
+        }
+    }
+    return enemy_pos;
+}
 
 int main(void) {
 
     create_tiles();
 
     InitWindow(screen_width, screen_height, "Tower Defense");
-    SetTargetFPS(120);
+    SetTargetFPS(60);
 
     GameScreen current_screen = GAMEPLAY;
     Vector2 enemy_pos = {200,200};
 
     int frames_counter = 0;
-    float speed = 2.0f;
+    float speed = 0.05f;
 
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
@@ -199,8 +215,7 @@ int main(void) {
                             player_position.x -= size.x / 2;
                             player_position.y -= size.y / 2;
                          
-                            // enemy_pos = Vector2Normalize(enemy_pos);
-                            enemy_pos = Vector2Lerp(enemy_pos, player_position, 0.000001f);
+                            enemy_pos = move_towards_player(enemy_pos, player_position, speed, delta_time);
 
                             DrawRectangleV(player_position, size, GREEN);
 
