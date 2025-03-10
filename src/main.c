@@ -73,7 +73,6 @@ int main(void) {
 
     int frames_counter = 0; 
 
-    // Image image = LoadImage("assets/colored_tilemap_packed.png");
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
   
