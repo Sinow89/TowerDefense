@@ -6,4 +6,6 @@
 - Priority, the enemys moves towards the towers first, and then towards the base. Maybe have like a radius on tower.
 - ~~Use the gamestate/menu setup from previous projects.~~
 - ~~Use tilemap setup from previous projects.~~
-- Start with just have a box moving towars another box.
+- ~~Start with just have a box moving towars another box.~~
+- Implement A star to make the enmey going towars a "tower".
+- ~~Implement that you can change a tile with the mouse on click.~~

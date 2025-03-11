@@ -78,6 +78,23 @@ Vector2 move_towards_player(Vector2 enemy_pos, Vector2 target_pos, float speed, 
     return enemy_pos;
 }
 
+void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]) {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            Rectangle tile_rect = { tiles[i][j].position.x, tiles[i][j].position.y, TILE_WIDTH, TILE_HEIGHT };
+
+            if (CheckCollisionPointRec(mouse_point, tile_rect)) {
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                    tiles[i][j].type = WALL;
+                }
+                if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+                    tiles[i][j].type = GOAL;
+                }
+            }
+        }
+    }
+}
+
 int main(void) {
 
     create_tiles();
@@ -87,6 +104,7 @@ int main(void) {
 
     GameScreen current_screen = GAMEPLAY;
     Vector2 enemy_pos = {200,200};
+    Vector2 mouse_point = { 0.0f, 0.0f };
 
     int frames_counter = 0;
     float speed = 0.05f;
@@ -97,7 +115,9 @@ int main(void) {
     while (!WindowShouldClose()) { 
 
         float delta_time = GetFrameTime();
+        mouse_point = GetMousePosition();
         
+        update_tiles_on_mouse(mouse_point, tiles);
 
         switch (current_screen)
         {
@@ -171,7 +191,7 @@ int main(void) {
                                     texture_index_y = 1;
                                     break;
                                 case WALL:
-                                    texture_index_x = 1;
+                                    texture_index_x = 11;
                                     texture_index_y = 1;
                                     break;
                                 case GOAL:
@@ -215,11 +235,11 @@ int main(void) {
                             player_position.x -= size.x / 2;
                             player_position.y -= size.y / 2;
                          
-                            enemy_pos = move_towards_player(enemy_pos, player_position, speed, delta_time);
+                            // enemy_pos = move_towards_player(enemy_pos, player_position, speed, delta_time);
 
-                            DrawRectangleV(player_position, size, GREEN);
+                            // DrawRectangleV(player_position, size, GREEN);
 
-                            DrawRectangleV(enemy_pos, size, RED);
+                            // DrawRectangleV(enemy_pos, size, RED);
                             
                         }
                     }
