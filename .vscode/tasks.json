@@ -6,6 +6,7 @@
                 "command": "C:/zig/zig.exe",
                 "args": [
                     "cc",
+                    "-g",
                     "-I",
                     "C:/raylib/include",
                     "-L",
