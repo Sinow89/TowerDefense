@@ -55,18 +55,18 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
 }
 
 // Function to visualize the path
-void drawPath(Point *path, int path_length, Color color) {
-    int i;
-    for (i = 0; i < path_length; i++) {
-        DrawRectangle(
-            path[i].x * TILE_WIDTH + TILE_WIDTH/4,
-            path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
-            TILE_WIDTH/2,
-            TILE_HEIGHT/2,
-            color
-        );
-    }
-}
+// void drawPath(Point *path, int path_length, Color color) {
+//     int i;
+//     for (i = 0; i < path_length; i++) {
+//         DrawRectangle(
+//             path[i].x * TILE_WIDTH + TILE_WIDTH/4,
+//             path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
+//             TILE_WIDTH/2,
+//             TILE_HEIGHT/2,
+//             color
+//         );
+//     }
+// }
 
 // Function to get the next position along a path
 Vector2 moveAlongPath(Vector2 current_pos, Point *path, int path_length, int *current_path_index, float speed, float delta_time) {
@@ -228,7 +228,6 @@ int main(void) {
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
         
-
         update_tiles_on_mouse(mouse_point, tiles);
         
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
@@ -348,10 +347,10 @@ int main(void) {
                     }
                     
                     // Draw the path if found
-                    if (path_found) {
-                        Color pathColor = ColorAlpha(BLUE, 0.5f);
-                        drawPath(path, path_length, pathColor);
-                    }
+                    // if (path_found) {
+                    //     Color pathColor = ColorAlpha(BLUE, 0.5f);
+                    //     drawPath(path, path_length, pathColor);
+                    // }
                     
                     // Draw the enemies
                     drawEnemies();

@@ -3,8 +3,8 @@
 
 #define TILE_HEIGHT 64
 #define TILE_WIDTH 64
-#define MAP_HEIGHT 45
-#define MAP_WIDTH 90
+#define MAP_HEIGHT 14
+#define MAP_WIDTH 28
 
 #include "raymath.h"
 
