@@ -9,6 +9,7 @@
                     "-g",
                     "-I",
                     "C:/raylib/include",
+                    "-I${workspaceFolder}/include",
                     "-L",
                     "C:/raylib/lib",
                     "-o",
