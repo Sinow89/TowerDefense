@@ -5,8 +5,8 @@
 
 const int dx[4] = {-1, 0, 1, 0};
 const int dy[4] = {0, 1, 0, -1};
+Point path[MAP_WIDTH * MAP_HEIGHT];
 
-// Structure to store path information
 typedef struct {
     int parent_x;
     int parent_y;

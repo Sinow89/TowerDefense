@@ -1,7 +1,7 @@
 // Created 2025-03-10 by Christoffer Rozenbachs
 
 #define MAX_TEXTURES 1
-#define MAX_QUEUE_SIZE (MAP_HEIGHT * MAP_WIDTH)
+#define MAX_ENEMIES 10
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -12,6 +12,9 @@
 const int screen_width = 1792;
 const int screen_height = 896;
 const int key = 0;
+int path_length = 0;
+Vector2 goal_position = {0, 0};
+bool path_found = false;
 
 typedef enum GameScreen{ 
     LOGO,
@@ -28,24 +31,11 @@ typedef struct player_t{
     int key;
 } player_t;
 
-
 typedef enum{
     TEXTURE_TILE_MAP = 0,
 } texture_asset;
 
 Texture2D textures[MAX_TEXTURES];
-
-
-
-void create_tiles(){
-    for (int y = 0; y < MAP_HEIGHT; y++){
-        for (int x = 0; x < MAP_WIDTH; x++){
-            tiles[y][x].position.y = y * 64;
-            tiles[y][x].position.x = x * 64;
-            tiles[y][x].type = FLOOR;
-        }
-    }
-};
 
 void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
@@ -124,7 +114,6 @@ Vector2 moveAlongPath(Vector2 current_pos, Point *path, int path_length, int *cu
     return current_pos;
 }
 
-// Add these structs and variables to your existing code
 typedef struct enemy_t {
     Vector2 position;
     Vector2 size;
@@ -134,12 +123,7 @@ typedef struct enemy_t {
     int current_path_index;
 } enemy_t;
 
-#define MAX_ENEMIES 10
 enemy_t enemies[MAX_ENEMIES];
-Point path[MAP_WIDTH * MAP_HEIGHT];
-int path_length = 0;
-Vector2 goal_position = {0, 0};
-bool path_found = false;
 
 // Function to initialize enemies
 void initEnemies(void) {
@@ -238,16 +222,15 @@ int main(void) {
 
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
-    UnloadImage(image);  // Good practice to unload the image after creating the texture
+    UnloadImage(image);
   
     while (!WindowShouldClose()) { 
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
         
-        // Update tiles based on mouse input
+
         update_tiles_on_mouse(mouse_point, tiles);
         
-        // Update the goal position when right-clicking
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
             goal_position = mouse_point;
             // Find path from enemy spawn to goal
@@ -261,7 +244,6 @@ int main(void) {
             enemy_spawn_timer = 0;
         }
         
-        // Update enemy positions
         updateEnemies(delta_time);
 
         switch (current_screen) {

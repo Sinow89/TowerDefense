@@ -24,4 +24,14 @@ typedef struct tiles_t{
 
 tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 
+void create_tiles(){
+    for (int y = 0; y < MAP_HEIGHT; y++){
+        for (int x = 0; x < MAP_WIDTH; x++){
+            tiles[y][x].position.y = y * 64;
+            tiles[y][x].position.x = x * 64;
+            tiles[y][x].type = FLOOR;
+        }
+    }
+};
+
 #endif // tiles.h
