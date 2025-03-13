@@ -12,6 +12,7 @@
 #define TILE_WIDTH 64
 #define MAX_TEXTURES 1
 #define MAX_QUEUE_SIZE (MAP_HEIGHT * MAP_WIDTH)
+#include "queue.h"
 
 const int screen_width = 1792;
 const int screen_height = 896;
@@ -100,43 +101,6 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
 
 const int dx[4] = {-1, 0, 1, 0};
 const int dy[4] = {0, 1, 0, -1};
-
-// Queue structure for BFS
-typedef struct {
-    int x, y;
-} Point;
-
-typedef struct {
-    Point items[MAX_QUEUE_SIZE];
-    int front, rear;
-} Queue;
-
-// Initialize the queue
-void initQueue(Queue *q) {
-    q->front = 0;
-    q->rear = -1;
-}
-
-// Check if queue is empty
-bool isEmpty(Queue *q) {
-    return q->rear < q->front;
-}
-
-// Add to queue
-void enqueue(Queue *q, int x, int y) {
-    if (q->rear < MAX_QUEUE_SIZE - 1) {
-        q->rear++;
-        q->items[q->rear].x = x;
-        q->items[q->rear].y = y;
-    }
-}
-
-// Remove from queue
-Point dequeue(Queue *q) {
-    Point p = q->items[q->front];
-    q->front++;
-    return p;
-}
 
 // Structure to store path information
 typedef struct {
