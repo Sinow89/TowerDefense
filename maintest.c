@@ -1,17 +1,17 @@
 // Created 2025-03-10 by Christoffer Rozenbachs
 
-#include <stdio.h>
-#include "raylib.h"
-#include "raymath.h"
-#include <stdbool.h>
-#include <stdlib.h>
-
 #define MAP_HEIGHT 45
 #define MAP_WIDTH 90
 #define TILE_HEIGHT 64
 #define TILE_WIDTH 64
 #define MAX_TEXTURES 1
 #define MAX_QUEUE_SIZE (MAP_HEIGHT * MAP_WIDTH)
+
+#include <stdio.h>
+#include "raylib.h"
+#include "raymath.h"
+#include <stdbool.h>
+#include <stdlib.h>
 #include "queue.h"
 
 const int screen_width = 1792;
