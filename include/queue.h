@@ -3,6 +3,8 @@
 
 #define MAX_QUEUE_SIZE (MAP_HEIGHT * MAP_WIDTH)
 
+#include "tiles.h"
+
 typedef struct {
     int x, y;
 } Point;
