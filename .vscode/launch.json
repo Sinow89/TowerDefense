@@ -2,11 +2,10 @@
     "configurations": [
                 {
             "cwd": "${workspaceFolder}",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "request": "launch",
             "name": "Launch MyGame",
             "program": "${workspaceFolder}/MyGame.exe",
-            "MIMode": "gdb",
             "preLaunchTask": "C/C++: zig.exe build active file"
         }      
     ]
