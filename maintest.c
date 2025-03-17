@@ -8,9 +8,10 @@
 #include <stdlib.h>
 #include "raylib.h"
 #include "bfs.h"
+#include "map.h"
 
-const int screen_width = 1792;
-const int screen_height = 896;
+const int screen_width = MAP_WIDTH * TILE_WIDTH;
+const int screen_height = MAP_HEIGHT * TILE_HEIGHT;
 const int key = 0;
 int path_length = 0;
 Vector2 goal_position = {0, 0};
@@ -47,7 +48,7 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
                     tiles[i][j].type = WALL;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-                    tiles[i][j].type = ROCKS;
+                    tiles[i][j].type = SAND;
                 }
             }
         }
@@ -156,8 +157,11 @@ float enemy_speed_on_tile(Vector2 position, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]
     int tileY = (int)(position.y / TILE_HEIGHT);
     
     if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
-        if (tiles[tileY][tileX].type == ROCKS) {
+        if (tiles[tileY][tileX].type == SAND) {
             return 50.0f;
+        }
+        if (tiles[tileY][tileX].type == WATER) {
+            return 25.0f;
         }
     }
     return 100.0f;
@@ -206,6 +210,7 @@ void drawEnemies(void) {
 
 int main(void) {
     create_tiles();
+    map_1();
 
     InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
@@ -217,8 +222,8 @@ int main(void) {
     // Initialize pathfinding variables
     path_found = false;
     path_length = 0;
-    goal_position.x = 0;
-    goal_position.y = 0;
+    goal_position.x = 400;
+    goal_position.y = 400;
     
     // Initialize enemies
     initEnemies();
@@ -244,11 +249,16 @@ int main(void) {
         mouse_point = GetMousePosition();
         
         update_tiles_on_mouse(mouse_point, tiles);
+        path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
         
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            goal_position = mouse_point;
+            //goal_position = mouse_point;
             // Find path from enemy spawn to goal
-            path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
+            //path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
+            // enemies[0].health = 0;
+            // if (enemies[0].health == 0){
+            //     enemies[0].active = false;
+            // }
         }
         
         // Handle enemy spawning
@@ -319,18 +329,18 @@ int main(void) {
                         for (x = 0; x < MAP_WIDTH; x++) {
                             switch (tiles[y][x].type) {
                                 case FLOOR:
-                                    texture_index_x = 15;
+                                    texture_index_x = 1;
                                     texture_index_y = 1;
                                     break;
                                 case WALL:
                                     texture_index_x = 11;
                                     texture_index_y = 1;
                                     break;
-                                case ROCKS:
-                                    texture_index_x = 4;
-                                    texture_index_y = 2;
+                                case SAND:
+                                    texture_index_x = 11;
+                                    texture_index_y = 10;
                                     break;
-                                case DOOR:
+                                case WATER:
                                     texture_index_x = 2;
                                     texture_index_y = 4;
                                     break;

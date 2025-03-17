@@ -3,16 +3,16 @@
 
 #define TILE_HEIGHT 64
 #define TILE_WIDTH 64
-#define MAP_HEIGHT 14
-#define MAP_WIDTH 28
+#define MAP_HEIGHT 12
+#define MAP_WIDTH 12
 
 #include "raymath.h"
 
 typedef enum tiles_type{
     FLOOR,
     WALL,
-    ROCKS,
-    DOOR,
+    SAND,
+    WATER,
     TREASURE,
 } tiles_type;
 
