@@ -47,7 +47,7 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
                     tiles[i][j].type = WALL;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-                    tiles[i][j].type = GOAL;
+                    tiles[i][j].type = ROCKS;
                 }
             }
         }
@@ -55,18 +55,18 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
 }
 
 // Function to visualize the path
-// void drawPath(Point *path, int path_length, Color color) {
-//     int i;
-//     for (i = 0; i < path_length; i++) {
-//         DrawRectangle(
-//             path[i].x * TILE_WIDTH + TILE_WIDTH/4,
-//             path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
-//             TILE_WIDTH/2,
-//             TILE_HEIGHT/2,
-//             color
-//         );
-//     }
-// }
+void drawPath(Point *path, int path_length, Color color) {
+    int i;
+    for (i = 0; i < path_length; i++) {
+        DrawRectangle(
+            path[i].x * TILE_WIDTH + TILE_WIDTH/4,
+            path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
+            TILE_WIDTH/2,
+            TILE_HEIGHT/2,
+            color
+        );
+    }
+}
 
 // Function to get the next position along a path
 Vector2 moveAlongPath(Vector2 current_pos, Point *path, int path_length, int *current_path_index, float speed, float delta_time) {
@@ -151,11 +151,26 @@ void spawnEnemy(Vector2 position) {
     }
 }
 
+float enemy_speed_on_tile(Vector2 position, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]) {
+    int tileX = (int)(position.x / TILE_WIDTH);
+    int tileY = (int)(position.y / TILE_HEIGHT);
+    
+    if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
+        if (tiles[tileY][tileX].type == ROCKS) {
+            return 50.0f;
+        }
+    }
+    return 100.0f;
+}
+
 // Function to update all enemies
 void updateEnemies(float delta_time) {
     int i;
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (enemies[i].active) {
+
+            enemies[i].speed = enemy_speed_on_tile(enemies[i].position, tiles);
+            
             // Move the enemy along the path
             enemies[i].position = moveAlongPath(
                 enemies[i].position, 
@@ -311,7 +326,7 @@ int main(void) {
                                     texture_index_x = 11;
                                     texture_index_y = 1;
                                     break;
-                                case GOAL:
+                                case ROCKS:
                                     texture_index_x = 4;
                                     texture_index_y = 2;
                                     break;
@@ -347,10 +362,10 @@ int main(void) {
                     }
                     
                     // Draw the path if found
-                    // if (path_found) {
-                    //     Color pathColor = ColorAlpha(BLUE, 0.5f);
-                    //     drawPath(path, path_length, pathColor);
-                    // }
+                    if (path_found) {
+                        Color pathColor = ColorAlpha(BLUE, 0.5f);
+                        drawPath(path, path_length, pathColor);
+                    }
                     
                     // Draw the enemies
                     drawEnemies();
