@@ -32,7 +32,7 @@ typedef struct player_t{
 typedef enum tiles_type{
     FLOOR,
     WALL,
-    GOAL,
+    ROCKS,
     DOOR,
     TREASURE,
 } tiles_type;
@@ -88,7 +88,7 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
                     tiles[i][j].type = WALL;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-                    tiles[i][j].type = GOAL;
+                    tiles[i][j].type = ROCKS;
                 }
             }
         }
@@ -194,7 +194,7 @@ int main(void) {
                                     texture_index_x = 11;
                                     texture_index_y = 1;
                                     break;
-                                case GOAL:
+                                case ROCKS:
                                     texture_index_x = 4;
                                     texture_index_y = 2;
                                     break;

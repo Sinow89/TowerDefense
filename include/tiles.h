@@ -11,7 +11,7 @@
 typedef enum tiles_type{
     FLOOR,
     WALL,
-    GOAL,
+    ROCKS,
     DOOR,
     TREASURE,
 } tiles_type;
@@ -24,11 +24,12 @@ typedef struct tiles_t{
 
 tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 
-void create_tiles(){
+void create_tiles()
+{
     for (int y = 0; y < MAP_HEIGHT; y++){
         for (int x = 0; x < MAP_WIDTH; x++){
-            tiles[y][x].position.y = y * 64;
-            tiles[y][x].position.x = x * 64;
+            tiles[y][x].position.y = y * TILE_HEIGHT;
+            tiles[y][x].position.x = x * TILE_WIDTH;
             tiles[y][x].type = FLOOR;
         }
     }
