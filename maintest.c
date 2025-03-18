@@ -46,9 +46,11 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
             if (CheckCollisionPointRec(mouse_point, tile_rect)) {
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
                     tiles[i][j].type = WALL;
+                    tiles[i][j].texture_x = 11;  tiles[i][j].texture_y = 1;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
                     tiles[i][j].type = SAND;
+                    tiles[i][j].texture_x = 11;  tiles[i][j].texture_y = 10;
                 }
             }
         }
@@ -247,6 +249,15 @@ int main(void) {
     while (!WindowShouldClose()) { 
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
+
+
+        // if (CheckCollisionCircleRec(ball.position, ball.radius, rec))
+        // {
+        //     enemies[0].health = 0;
+        //     if (enemies[0].health == 0){
+        //     enemies[0].active = false;
+        //     }
+        // }
         
         update_tiles_on_mouse(mouse_point, tiles);
         path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
@@ -324,39 +335,63 @@ int main(void) {
                     int texture_index_y = 0;
                     int x, y;
 
-                    // Draw the map tiles
+                    // // Draw the map tiles
+                    // for (y = 0; y < MAP_HEIGHT; y++) {
+                    //     for (x = 0; x < MAP_WIDTH; x++) {
+                    //         switch (tiles[y][x].type) {
+                    //             case FLOOR:
+                    //                 texture_index_x = 1;
+                    //                 texture_index_y = 1;
+                    //                 break;
+                    //             case WALL:
+                    //                 texture_index_x = 11;
+                    //                 texture_index_y = 1;
+                    //                 break;
+                    //             case SAND:
+                    //                 texture_index_x = 11;
+                    //                 texture_index_y = 10;
+                    //                 break;
+                    //             case WATER:
+                    //                 texture_index_x = 2;
+                    //                 texture_index_y = 4;
+                    //                 break;
+                    //             case TREASURE:
+                    //                 texture_index_x = 10;
+                    //                 texture_index_y = 5;
+                    //                 break;
+                    //             default:
+                    //                 texture_index_x = 4;
+                    //                 texture_index_y = 3;
+                    //                 break;
+                    //         }
+                
+                    //         Rectangle source;
+                    //         source.x = (float)texture_index_x * TILE_HEIGHT;
+                    //         source.y = (float)texture_index_y * TILE_WIDTH;
+                    //         source.width = (float)TILE_WIDTH;
+                    //         source.height = (float)TILE_HEIGHT;
+                
+                    //         Rectangle dest;
+                    //         dest.x = (float)(tiles[y][x].position.x);
+                    //         dest.y = (float)(tiles[y][x].position.y);
+                    //         dest.width = 64;
+                    //         dest.height = 64;
+                
+                    //         Vector2 origin = {0, 0};
+                    //         DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+                    //     }
+                    // }
+
+
+                   
+          
+
+                    
                     for (y = 0; y < MAP_HEIGHT; y++) {
                         for (x = 0; x < MAP_WIDTH; x++) {
-                            switch (tiles[y][x].type) {
-                                case FLOOR:
-                                    texture_index_x = 1;
-                                    texture_index_y = 1;
-                                    break;
-                                case WALL:
-                                    texture_index_x = 11;
-                                    texture_index_y = 1;
-                                    break;
-                                case SAND:
-                                    texture_index_x = 11;
-                                    texture_index_y = 10;
-                                    break;
-                                case WATER:
-                                    texture_index_x = 2;
-                                    texture_index_y = 4;
-                                    break;
-                                case TREASURE:
-                                    texture_index_x = 10;
-                                    texture_index_y = 5;
-                                    break;
-                                default:
-                                    texture_index_x = 4;
-                                    texture_index_y = 3;
-                                    break;
-                            }
-                
                             Rectangle source;
-                            source.x = (float)texture_index_x * TILE_HEIGHT;
-                            source.y = (float)texture_index_y * TILE_WIDTH;
+                            source.x = (float)tiles[y][x].texture_x * TILE_WIDTH;
+                            source.y = (float)tiles[y][x].texture_y * TILE_HEIGHT;
                             source.width = (float)TILE_WIDTH;
                             source.height = (float)TILE_HEIGHT;
                 
@@ -365,7 +400,7 @@ int main(void) {
                             dest.y = (float)(tiles[y][x].position.y);
                             dest.width = 64;
                             dest.height = 64;
-                
+
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
                         }
