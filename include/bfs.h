@@ -14,7 +14,9 @@ typedef struct {
 } PathInfo;
 
 // Function to find path using BFS
-bool findPath(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], Vector2 start, Vector2 goal, 
+bool findPath(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH],
+            PathInfo info[MAP_HEIGHT][MAP_WIDTH],
+             Vector2 start, Vector2 goal, 
               Point *path, int *path_length) {
     
     // Convert start and goal positions to grid coordinates
@@ -35,7 +37,6 @@ bool findPath(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], Vector2 start, Vector2 goal,
     }
     
     // Initialize visited array and parent array
-    PathInfo info[MAP_HEIGHT][MAP_WIDTH];
     int i, j;
     for (i = 0; i < MAP_HEIGHT; i++) {
         for (j = 0; j < MAP_WIDTH; j++) {

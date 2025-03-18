@@ -124,6 +124,9 @@ typedef struct enemy_t {
     int health;
     bool active;
     int current_path_index;
+    Point path[MAP_WIDTH * MAP_HEIGHT]; // Individual path for this enemy
+    int path_length;
+    Vector2 velocity;
 } enemy_t;
 
 enemy_t enemies[MAX_ENEMIES];
@@ -149,6 +152,7 @@ void spawnEnemy(Vector2 position) {
             enemies[i].position = position;
             enemies[i].active = true;
             enemies[i].current_path_index = 0;
+            enemies[i].velocity = Vector2Zero();
             break;
         }
     }
@@ -170,28 +174,46 @@ float enemy_speed_on_tile(Vector2 position, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]
 }
 
 // Function to update all enemies
-void updateEnemies(float delta_time) {
+void updateEnemies(float delta_time, PathInfo info[MAP_HEIGHT][MAP_WIDTH]) {
     int i;
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (enemies[i].active) {
 
+            int tile_x = enemies[i].position.x / TILE_WIDTH;
+            int tile_y = enemies[i].position.y / TILE_HEIGHT;
+
+            int goal_x = (info[tile_y][tile_x].parent_x * TILE_WIDTH);
+            int goal_y = (info[tile_y][tile_x].parent_y * TILE_HEIGHT);
+
+            if (goal_x < 0 || goal_y < 0) {
+                enemies[i].active = false;
+                continue;
+            }
+
+            Vector2 target_direction = Vector2Subtract((Vector2){goal_x, goal_y}, enemies[i].position);
+            target_direction = Vector2Normalize(target_direction);
+            enemies[i].velocity = Vector2Scale(target_direction, enemies[i].speed);
+            
+            enemies[i].position = Vector2Add(enemies[i].position, Vector2Scale(enemies[i].velocity, delta_time));
+
+
             enemies[i].speed = enemy_speed_on_tile(enemies[i].position, tiles);
             
-            // Move the enemy along the path
-            enemies[i].position = moveAlongPath(
-                enemies[i].position, 
-                path, 
-                path_length, 
-                &enemies[i].current_path_index, 
-                enemies[i].speed, 
-                delta_time
-            );
+            // // Move the enemy along the path
+            // enemies[i].position = moveAlongPath(
+            //     enemies[i].position, 
+            //     enemies[i].path,  // Use enemy's individual path
+            //     enemies[i].path_length,  // Use enemy's individual path length
+            //     &enemies[i].current_path_index, 
+            //     enemies[i].speed, 
+            //     delta_time
+            // );
             
-            // Check if enemy reached the end of the path
-            if (enemies[i].current_path_index >= path_length) {
-                enemies[i].active = false;
-                // Here you would typically subtract lives or handle enemy reaching the goal
-            }
+            // // Check if enemy reached the end of the path
+            // if (enemies[i].current_path_index >= path_length) {
+            //     enemies[i].active = false;
+            //     // Here you would typically subtract lives or handle enemy reaching the goal
+            // }
         }
     }
 }
@@ -224,16 +246,16 @@ int main(void) {
     // Initialize pathfinding variables
     path_found = false;
     path_length = 0;
-    goal_position.x = 400;
-    goal_position.y = 400;
+    goal_position.x = 0;
+    goal_position.y = 0;
     
     // Initialize enemies
     initEnemies();
     
     // Set a starting position for spawning enemies
     Vector2 spawn_position;
-    spawn_position.x = 200;
-    spawn_position.y = 200;
+    spawn_position.x = 400;
+    spawn_position.y = 500;
     
     // Timer for spawning enemies
     float enemy_spawn_timer = 0;
@@ -245,7 +267,9 @@ int main(void) {
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
     UnloadImage(image);
-  
+    
+    PathInfo info[MAP_HEIGHT][MAP_WIDTH] = { 0 };
+    
     while (!WindowShouldClose()) { 
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
@@ -260,7 +284,7 @@ int main(void) {
         // }
         
         update_tiles_on_mouse(mouse_point, tiles);
-        path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
+        path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
         
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
             //goal_position = mouse_point;
@@ -279,7 +303,7 @@ int main(void) {
             enemy_spawn_timer = 0;
         }
         
-        updateEnemies(delta_time);
+        updateEnemies(delta_time, info);
 
         switch (current_screen) {
             case LOGO:
@@ -403,6 +427,9 @@ int main(void) {
 
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+
+                            DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
+                                x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
                     }
                     
