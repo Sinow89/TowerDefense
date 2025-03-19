@@ -13,7 +13,7 @@ typedef enum tiles_type{
     WALL,
     SAND,
     WATER,
-    TREASURE,
+    TOWER,
 } tiles_type;
 
 typedef struct tiles_t{

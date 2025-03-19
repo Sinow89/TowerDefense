@@ -9,6 +9,7 @@
 #include "raylib.h"
 #include "bfs.h"
 #include "map.h"
+#include "tower.h"
 
 const int screen_width = MAP_WIDTH * TILE_WIDTH;
 const int screen_height = MAP_HEIGHT * TILE_HEIGHT;
@@ -228,6 +229,12 @@ void drawEnemies(void) {
     }
 }
 
+void shoot_bullet(Vector2 *bulletPos, Vector2 enemyPos, float speed) {
+    Vector2 direction = Vector2Subtract(enemyPos, *bulletPos);
+    direction = Vector2Normalize(direction);
+    *bulletPos = Vector2Add(*bulletPos, Vector2Scale(direction, speed));
+}
+
 int main(void) {
     create_tiles();
     map_1();
@@ -271,13 +278,17 @@ int main(void) {
         mouse_point = GetMousePosition();
 
 
-        // if (CheckCollisionCircleRec(ball.position, ball.radius, rec))
-        // {
-        //     enemies[0].health = 0;
-        //     if (enemies[0].health == 0){
-        //     enemies[0].active = false;
-        //     }
-        // }
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+            if (enemies[i].active) {
+                Rectangle rec = {enemies[i].position.x, enemies[i].position.y, 16, 16};
+        
+                if (CheckCollisionCircleRec(bullet.position, bullet.radius, rec)) {
+                    enemies[i].health = 0;
+                    enemies[i].active = false;
+                    bullet.active = false;
+                }
+            }
+        }
         
         update_tiles_on_mouse(mouse_point, tiles);
         path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
@@ -433,6 +444,12 @@ int main(void) {
                         drawPath(path, path_length, pathColor);
                     }
                     
+
+                    if (bullet.active == true){
+                        shoot_bullet(&bullet.position, enemies[0].position, 5.0f);
+                        DrawCircleV(bullet.position, bullet.radius, BLACK);
+                    }
+
                     // Draw the enemies
                     drawEnemies();
                     
