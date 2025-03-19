@@ -152,7 +152,7 @@ void spawnEnemy(Vector2 position) {
             enemies[i].position = position;
             enemies[i].active = true;
             enemies[i].current_path_index = 0;
-            enemies[i].velocity = Vector2Zero();
+            enemies[i].velocity = (Vector2){0, 0};
             break;
         }
     }
