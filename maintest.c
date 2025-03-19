@@ -178,42 +178,38 @@ void updateEnemies(float delta_time, PathInfo info[MAP_HEIGHT][MAP_WIDTH]) {
     int i;
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (enemies[i].active) {
-
             int tile_x = enemies[i].position.x / TILE_WIDTH;
             int tile_y = enemies[i].position.y / TILE_HEIGHT;
-
-            int goal_x = (info[tile_y][tile_x].parent_x * TILE_WIDTH);
-            int goal_y = (info[tile_y][tile_x].parent_y * TILE_HEIGHT);
-
-            if (goal_x < 0 || goal_y < 0) {
+            
+            if (info[tile_y][tile_x].parent_x < 0 || info[tile_y][tile_x].parent_y < 0) {
                 enemies[i].active = false;
                 continue;
             }
-
+            
+            float goal_x = (info[tile_y][tile_x].parent_x * TILE_WIDTH) + (TILE_WIDTH / 2);
+            float goal_y = (info[tile_y][tile_x].parent_y * TILE_HEIGHT) + (TILE_HEIGHT / 2);
+            
+            // Calculate direction to parent tile center
             Vector2 target_direction = Vector2Subtract((Vector2){goal_x, goal_y}, enemies[i].position);
-            target_direction = Vector2Normalize(target_direction);
-            enemies[i].velocity = Vector2Scale(target_direction, enemies[i].speed);
             
-            enemies[i].position = Vector2Add(enemies[i].position, Vector2Scale(enemies[i].velocity, delta_time));
-
-
+            // Only move if we're not already at the target (prevents jittering)
+            float distance = Vector2Length(target_direction);
+            if (distance > 2.0f) {
+                target_direction = Vector2Normalize(target_direction);
+                enemies[i].velocity = Vector2Scale(target_direction, enemies[i].speed);
+                enemies[i].position = Vector2Add(enemies[i].position, Vector2Scale(enemies[i].velocity, delta_time));
+            } else {
+                // We're close enough to this tile center, check if we need to move to the next tile
+                // Get the next tile in the path from the parent information
+                int next_tile_x = info[tile_y][tile_x].parent_x;
+                int next_tile_y = info[tile_y][tile_x].parent_y;
+                
+                // If we're at the center of the current tile, snap to it to prevent floating point issues
+                enemies[i].position.x = tile_x * TILE_WIDTH + (TILE_WIDTH / 2);
+                enemies[i].position.y = tile_y * TILE_HEIGHT + (TILE_HEIGHT / 2);
+            }
+            
             enemies[i].speed = enemy_speed_on_tile(enemies[i].position, tiles);
-            
-            // // Move the enemy along the path
-            // enemies[i].position = moveAlongPath(
-            //     enemies[i].position, 
-            //     enemies[i].path,  // Use enemy's individual path
-            //     enemies[i].path_length,  // Use enemy's individual path length
-            //     &enemies[i].current_path_index, 
-            //     enemies[i].speed, 
-            //     delta_time
-            // );
-            
-            // // Check if enemy reached the end of the path
-            // if (enemies[i].current_path_index >= path_length) {
-            //     enemies[i].active = false;
-            //     // Here you would typically subtract lives or handle enemy reaching the goal
-            // }
         }
     }
 }
@@ -246,16 +242,16 @@ int main(void) {
     // Initialize pathfinding variables
     path_found = false;
     path_length = 0;
-    goal_position.x = 0;
-    goal_position.y = 0;
+    goal_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
+    goal_position.y = 11 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
     // Initialize enemies
     initEnemies();
     
     // Set a starting position for spawning enemies
     Vector2 spawn_position;
-    spawn_position.x = 400;
-    spawn_position.y = 500;
+    spawn_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
+    spawn_position.y = 0 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
     // Timer for spawning enemies
     float enemy_spawn_timer = 0;
@@ -287,9 +283,7 @@ int main(void) {
         path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
         
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            //goal_position = mouse_point;
             // Find path from enemy spawn to goal
-            //path_found = findPath(tiles, spawn_position, goal_position, path, &path_length);
             // enemies[0].health = 0;
             // if (enemies[0].health == 0){
             //     enemies[0].active = false;
@@ -443,12 +437,12 @@ int main(void) {
                     drawEnemies();
                     
                     // Draw the spawn point
-                    DrawCircleV(spawn_position, 10, GREEN);
+                    // DrawCircleV(spawn_position, 10, GREEN);
                     
                     // Draw the goal point
-                    if (path_found) {
-                        DrawCircleV(goal_position, 10, PURPLE);
-                    }
+                    // if (path_found) {
+                    //     DrawCircleV(goal_position, 10, PURPLE);
+                    // }
 
                     // Draw UI information
                     char keyText[20];
