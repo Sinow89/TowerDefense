@@ -223,7 +223,7 @@ void drawEnemies(void) {
             Vector2 position;
             position.x = enemies[i].position.x - enemies[i].size.x/2;
             position.y = enemies[i].position.y - enemies[i].size.y/2;
-            
+
             DrawRectangleV(position, enemies[i].size, RED);
         }
     }
@@ -237,7 +237,6 @@ void shoot_bullet(Vector2 *bulletPos, Vector2 enemyPos, float speed) {
 
 int main(void) {
     create_tiles();
-    map_1();
 
     InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
@@ -252,20 +251,16 @@ int main(void) {
     goal_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
     goal_position.y = 11 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
-    // Initialize enemies
     initEnemies();
     
-    // Set a starting position for spawning enemies
     Vector2 spawn_position;
     spawn_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
     spawn_position.y = 0 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
-    // Timer for spawning enemies
     float enemy_spawn_timer = 0;
-    float enemy_spawn_interval = 3.0f; // Spawn an enemy every 3 seconds
+    float enemy_spawn_interval = 3.0f;
 
     int frames_counter = 0;
-    float speed = 100.0f;  // Increased speed for better visualization
 
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
@@ -364,58 +359,6 @@ int main(void) {
                     int texture_index_y = 0;
                     int x, y;
 
-                    // // Draw the map tiles
-                    // for (y = 0; y < MAP_HEIGHT; y++) {
-                    //     for (x = 0; x < MAP_WIDTH; x++) {
-                    //         switch (tiles[y][x].type) {
-                    //             case FLOOR:
-                    //                 texture_index_x = 1;
-                    //                 texture_index_y = 1;
-                    //                 break;
-                    //             case WALL:
-                    //                 texture_index_x = 11;
-                    //                 texture_index_y = 1;
-                    //                 break;
-                    //             case SAND:
-                    //                 texture_index_x = 11;
-                    //                 texture_index_y = 10;
-                    //                 break;
-                    //             case WATER:
-                    //                 texture_index_x = 2;
-                    //                 texture_index_y = 4;
-                    //                 break;
-                    //             case TREASURE:
-                    //                 texture_index_x = 10;
-                    //                 texture_index_y = 5;
-                    //                 break;
-                    //             default:
-                    //                 texture_index_x = 4;
-                    //                 texture_index_y = 3;
-                    //                 break;
-                    //         }
-                
-                    //         Rectangle source;
-                    //         source.x = (float)texture_index_x * TILE_HEIGHT;
-                    //         source.y = (float)texture_index_y * TILE_WIDTH;
-                    //         source.width = (float)TILE_WIDTH;
-                    //         source.height = (float)TILE_HEIGHT;
-                
-                    //         Rectangle dest;
-                    //         dest.x = (float)(tiles[y][x].position.x);
-                    //         dest.y = (float)(tiles[y][x].position.y);
-                    //         dest.width = 64;
-                    //         dest.height = 64;
-                
-                    //         Vector2 origin = {0, 0};
-                    //         DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
-                    //     }
-                    // }
-
-
-                   
-          
-
-                    
                     for (y = 0; y < MAP_HEIGHT; y++) {
                         for (x = 0; x < MAP_WIDTH; x++) {
                             Rectangle source;
