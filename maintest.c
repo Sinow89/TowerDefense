@@ -422,8 +422,8 @@ int main(void) {
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
 
-                            DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
-                                x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
+                            // DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
+                            //     x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
                     }
                     
@@ -445,12 +445,12 @@ int main(void) {
                     // }
 
                     // Draw UI information
-                    char keyText[20];
-                    sprintf(keyText, "Keys: %d", key);
-                    DrawText(keyText, 20, 20, 20, WHITE);
+                    // char keyText[20];
+                    // sprintf(keyText, "Keys: %d", key);
+                    // DrawText(keyText, 20, 20, 20, WHITE);
                     
-                    DrawText("Left-click: Place wall", 20, 50, 20, WHITE);
-                    DrawText("Right-click: Set goal", 20, 80, 20, WHITE);
+                    // DrawText("Left-click: Place wall", 20, 50, 20, WHITE);
+                    // DrawText("Right-click: Set goal", 20, 80, 20, WHITE);
                 } break;
                 case ENDING:
                 {
