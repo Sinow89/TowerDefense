@@ -277,10 +277,10 @@ int main(void) {
             if (enemies[i].active) {
                 Rectangle rec = {enemies[i].position.x, enemies[i].position.y, 16, 16};
         
-                if (CheckCollisionCircleRec(bullet.position, bullet.radius, rec)) {
+                if (CheckCollisionCircleRec(bullet[i].position, bullet[i].radius, rec)) {
                     enemies[i].health = 0;
                     enemies[i].active = false;
-                    bullet.active = false;
+                    bullet[i].active = false;
                 }
             }
         }
@@ -387,10 +387,11 @@ int main(void) {
                         drawPath(path, path_length, pathColor);
                     }
                     
-
-                    if (bullet.active == true){
-                        shoot_bullet(&bullet.position, enemies[0].position, 5.0f);
-                        DrawCircleV(bullet.position, bullet.radius, BLACK);
+                    for (int i = 0; i < MAX_ENEMIES; i++){
+                        if (bullet[i].active == true){
+                            shoot_bullet(&bullet[i].position, enemies[0].position, 5.0f);
+                            DrawCircleV(bullet[i].position, bullet[i].radius, BLACK);
+                        }
                     }
 
                     // Draw the enemies
