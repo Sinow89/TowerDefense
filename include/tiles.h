@@ -3,8 +3,8 @@
 
 #define TILE_HEIGHT 64
 #define TILE_WIDTH 64
-#define MAP_HEIGHT 12
-#define MAP_WIDTH 12
+#define MAP_HEIGHT 13
+#define MAP_WIDTH 13
 
 #include "raymath.h"
 
@@ -39,20 +39,20 @@ void create_tiles()
         }
     }
 
-    tiles[0][0].texture_x = 1;  tiles[0][0].texture_y = 1;
-    tiles[0][1].texture_x = 1;  tiles[0][1].texture_y = 1;
-    tiles[0][2].texture_x = 1;  tiles[0][2].texture_y = 1;
-    tiles[0][3].texture_x = 1;  tiles[0][3].texture_y = 1;
-    tiles[0][4].texture_x = 1;  tiles[0][4].texture_y = 1;
-    tiles[0][5].texture_x = 1;  tiles[0][5].texture_y = 1;
-    tiles[0][6].texture_x = 1;  tiles[0][6].texture_y = 1;
-    tiles[0][7].texture_x = 1;  tiles[0][7].texture_y = 1;
-    tiles[0][8].texture_x = 1;  tiles[0][8].texture_y = 1;
-    tiles[0][9].texture_x = 1; tiles[0][9].texture_y = 1;
-    tiles[0][10].texture_x = 1; tiles[0][10].texture_y = 1;
-    tiles[0][11].texture_x = 1; tiles[0][11].texture_y = 1;
+    tiles[0][0].texture_x = 0;  tiles[0][0].texture_y = 0;
+    tiles[0][1].texture_x = 1;  tiles[0][1].texture_y = 0;
+    tiles[0][2].texture_x = 1;  tiles[0][2].texture_y = 0;
+    tiles[0][3].texture_x = 1;  tiles[0][3].texture_y = 0;
+    tiles[0][4].texture_x = 1;  tiles[0][4].texture_y = 0;
+    tiles[0][5].texture_x = 1;  tiles[0][5].texture_y = 0;
+    tiles[0][6].texture_x = 1;  tiles[0][6].texture_y = 0;
+    tiles[0][7].texture_x = 1;  tiles[0][7].texture_y = 0;
+    tiles[0][8].texture_x = 1;  tiles[0][8].texture_y = 0;
+    tiles[0][9].texture_x = 1; tiles[0][9].texture_y = 0;
+    tiles[0][10].texture_x = 1; tiles[0][10].texture_y = 0;
+    tiles[0][11].texture_x = 2; tiles[0][11].texture_y = 0;
     
-    tiles[1][0].texture_x = 1;  tiles[1][0].texture_y = 1;
+    tiles[1][0].texture_x = 0;  tiles[1][0].texture_y = 1;
     tiles[1][1].texture_x = 1;  tiles[1][1].texture_y = 1;
     tiles[1][2].texture_x = 1;  tiles[1][2].texture_y = 1;
     tiles[1][3].texture_x = 1;  tiles[1][3].texture_y = 1;
@@ -63,9 +63,9 @@ void create_tiles()
     tiles[1][8].texture_x = 1;  tiles[1][8].texture_y = 1;
     tiles[1][9].texture_x = 1; tiles[1][9].texture_y = 1;
     tiles[1][10].texture_x = 1; tiles[1][10].texture_y = 1;
-    tiles[1][11].texture_x = 1; tiles[1][11].texture_y = 1;
+    tiles[1][11].texture_x = 2; tiles[1][11].texture_y = 1;
     
-    tiles[2][0].texture_x = 1;  tiles[2][0].texture_y = 1;
+    tiles[2][0].texture_x = 0;  tiles[2][0].texture_y = 1;
     tiles[2][1].texture_x = 1;  tiles[2][1].texture_y = 1;
     tiles[2][2].texture_x = 1;  tiles[2][2].texture_y = 1;
     tiles[2][3].texture_x = 1;  tiles[2][3].texture_y = 1;
@@ -76,9 +76,9 @@ void create_tiles()
     tiles[2][8].texture_x = 1;  tiles[2][8].texture_y = 1;
     tiles[2][9].texture_x = 1; tiles[2][9].texture_y = 1;
     tiles[2][10].texture_x = 1; tiles[2][10].texture_y = 1;
-    tiles[2][11].texture_x = 1; tiles[2][11].texture_y = 1;
+    tiles[2][11].texture_x = 2; tiles[2][11].texture_y = 1;
     
-    tiles[3][0].texture_x = 1;  tiles[3][0].texture_y = 1;
+    tiles[3][0].texture_x = 0;  tiles[3][0].texture_y = 1;
     tiles[3][1].texture_x = 1;  tiles[3][1].texture_y = 1;
     tiles[3][2].texture_x = 1;  tiles[3][2].texture_y = 1;
     tiles[3][3].texture_x = 1;  tiles[3][3].texture_y = 1;
@@ -89,9 +89,9 @@ void create_tiles()
     tiles[3][8].texture_x = 1;  tiles[3][8].texture_y = 1;
     tiles[3][9].texture_x = 1; tiles[3][9].texture_y = 1;
     tiles[3][10].texture_x = 1; tiles[3][10].texture_y = 1;
-    tiles[3][11].texture_x = 1; tiles[3][11].texture_y = 1;
+    tiles[3][11].texture_x = 2; tiles[3][11].texture_y = 1;
     
-    tiles[4][0].texture_x = 1;  tiles[4][0].texture_y = 1;
+    tiles[4][0].texture_x = 0;  tiles[4][0].texture_y = 1;
     tiles[4][1].texture_x = 1;  tiles[4][1].texture_y = 1;
     tiles[4][2].texture_x = 1;  tiles[4][2].texture_y = 1;
     tiles[4][3].texture_x = 1;  tiles[4][3].texture_y = 1;
@@ -102,9 +102,9 @@ void create_tiles()
     tiles[4][8].texture_x = 1;  tiles[4][8].texture_y = 1;
     tiles[4][9].texture_x = 1; tiles[4][9].texture_y = 1;
     tiles[4][10].texture_x = 1; tiles[4][10].texture_y = 1;
-    tiles[4][11].texture_x = 1; tiles[4][11].texture_y = 1;
+    tiles[4][11].texture_x = 2; tiles[4][11].texture_y = 1;
     
-    tiles[5][0].texture_x = 1;  tiles[5][0].texture_y = 1;
+    tiles[5][0].texture_x = 0;  tiles[5][0].texture_y = 1;
     tiles[5][1].texture_x = 1;  tiles[5][1].texture_y = 1;
     tiles[5][2].texture_x = 1;  tiles[5][2].texture_y = 1;
     tiles[5][3].texture_x = 1;  tiles[5][3].texture_y = 1;
@@ -115,9 +115,9 @@ void create_tiles()
     tiles[5][8].texture_x = 1;  tiles[5][8].texture_y = 1;
     tiles[5][9].texture_x = 1; tiles[5][9].texture_y = 1;
     tiles[5][10].texture_x = 1; tiles[5][10].texture_y = 1;
-    tiles[5][11].texture_x = 1; tiles[5][11].texture_y = 1;
+    tiles[5][11].texture_x = 2; tiles[5][11].texture_y = 1;
     
-    tiles[6][0].texture_x = 1;  tiles[6][0].texture_y = 1;
+    tiles[6][0].texture_x = 0;  tiles[6][0].texture_y = 1;
     tiles[6][1].texture_x = 1;  tiles[6][1].texture_y = 1;
     tiles[6][2].texture_x = 1;  tiles[6][2].texture_y = 1;
     tiles[6][3].texture_x = 1;  tiles[6][3].texture_y = 1;
@@ -128,9 +128,9 @@ void create_tiles()
     tiles[6][8].texture_x = 1;  tiles[6][8].texture_y = 1;
     tiles[6][9].texture_x = 1; tiles[6][9].texture_y = 1;
     tiles[6][10].texture_x = 1; tiles[6][10].texture_y = 1;
-    tiles[6][11].texture_x = 1; tiles[6][11].texture_y = 1;
+    tiles[6][11].texture_x = 2; tiles[6][11].texture_y = 1;
     
-    tiles[7][0].texture_x = 1;  tiles[7][0].texture_y = 1;
+    tiles[7][0].texture_x = 0;  tiles[7][0].texture_y = 1;
     tiles[7][1].texture_x = 1;  tiles[7][1].texture_y = 1;
     tiles[7][2].texture_x = 1;  tiles[7][2].texture_y = 1;
     tiles[7][3].texture_x = 1;  tiles[7][3].texture_y = 1;
@@ -141,9 +141,9 @@ void create_tiles()
     tiles[7][8].texture_x = 1;  tiles[7][8].texture_y = 1;
     tiles[7][9].texture_x = 1; tiles[7][9].texture_y = 1;
     tiles[7][10].texture_x = 1; tiles[7][10].texture_y = 1;
-    tiles[7][11].texture_x = 1; tiles[7][11].texture_y = 1;
+    tiles[7][11].texture_x = 2; tiles[7][11].texture_y = 1;
     
-    tiles[8][0].texture_x = 1;  tiles[8][0].texture_y = 1;
+    tiles[8][0].texture_x = 0;  tiles[8][0].texture_y = 1;
     tiles[8][1].texture_x = 1;  tiles[8][1].texture_y = 1;
     tiles[8][2].texture_x = 1;  tiles[8][2].texture_y = 1;
     tiles[8][3].texture_x = 1;  tiles[8][3].texture_y = 1;
@@ -154,9 +154,9 @@ void create_tiles()
     tiles[8][8].texture_x = 1;  tiles[8][8].texture_y = 1;
     tiles[8][9].texture_x = 1; tiles[8][9].texture_y = 1;
     tiles[8][10].texture_x = 1; tiles[8][10].texture_y = 1;
-    tiles[8][11].texture_x = 1; tiles[8][11].texture_y = 1;
+    tiles[8][11].texture_x = 2; tiles[8][11].texture_y = 1;
     
-    tiles[9][0].texture_x = 1;  tiles[9][0].texture_y = 1;
+    tiles[9][0].texture_x = 0;  tiles[9][0].texture_y = 1;
     tiles[9][1].texture_x = 1;  tiles[9][1].texture_y = 1;
     tiles[9][2].texture_x = 1;  tiles[9][2].texture_y = 1;
     tiles[9][3].texture_x = 1;  tiles[9][3].texture_y = 1;
@@ -167,9 +167,9 @@ void create_tiles()
     tiles[9][8].texture_x = 1;  tiles[9][8].texture_y = 1;
     tiles[9][9].texture_x = 1; tiles[9][9].texture_y = 1;
     tiles[9][10].texture_x = 1; tiles[9][10].texture_y = 1;
-    tiles[9][11].texture_x = 1; tiles[9][11].texture_y = 1;
+    tiles[9][11].texture_x = 2; tiles[9][11].texture_y = 1;
     
-    tiles[10][0].texture_x = 1;  tiles[10][0].texture_y = 1;
+    tiles[10][0].texture_x = 0;  tiles[10][0].texture_y = 1;
     tiles[10][1].texture_x = 1;  tiles[10][1].texture_y = 1;
     tiles[10][2].texture_x = 1;  tiles[10][2].texture_y = 1;
     tiles[10][3].texture_x = 1;  tiles[10][3].texture_y = 1;
@@ -180,20 +180,22 @@ void create_tiles()
     tiles[10][8].texture_x = 1;  tiles[10][8].texture_y = 1;
     tiles[10][9].texture_x = 1; tiles[10][9].texture_y = 1;
     tiles[10][10].texture_x = 1; tiles[10][10].texture_y = 1;
-    tiles[10][11].texture_x = 1; tiles[10][11].texture_y = 1;
+    tiles[10][11].texture_x = 2; tiles[10][11].texture_y = 1;
     
-    tiles[11][0].texture_x = 1;  tiles[11][0].texture_y = 1;
-    tiles[11][1].texture_x = 1;  tiles[11][1].texture_y = 1;
-    tiles[11][2].texture_x = 1;  tiles[11][2].texture_y = 1;
-    tiles[11][3].texture_x = 1;  tiles[11][3].texture_y = 1;
-    tiles[11][4].texture_x = 1;  tiles[11][4].texture_y = 1;
-    tiles[11][5].texture_x = 1;  tiles[11][5].texture_y = 1;
-    tiles[11][6].texture_x = 1;  tiles[11][6].texture_y = 1;
-    tiles[11][7].texture_x = 1;  tiles[11][7].texture_y = 1;
-    tiles[11][8].texture_x = 1;  tiles[11][8].texture_y = 1;
-    tiles[11][9].texture_x = 1; tiles[11][9].texture_y = 1;
-    tiles[11][10].texture_x = 1; tiles[11][10].texture_y = 1;
-    tiles[11][11].texture_x = 1; tiles[11][11].texture_y = 1;
+    tiles[11][0].texture_x = 0;  tiles[11][0].texture_y = 2;
+    tiles[11][1].texture_x = 1;  tiles[11][1].texture_y = 2;
+    tiles[11][2].texture_x = 1;  tiles[11][2].texture_y = 2;
+    tiles[11][3].texture_x = 1;  tiles[11][3].texture_y = 2;
+    tiles[11][4].texture_x = 1;  tiles[11][4].texture_y = 2;
+    tiles[11][5].texture_x = 1;  tiles[11][5].texture_y = 2;
+    tiles[11][6].texture_x = 1;  tiles[11][6].texture_y = 2;
+    tiles[11][7].texture_x = 1;  tiles[11][7].texture_y = 2;
+    tiles[11][8].texture_x = 1;  tiles[11][8].texture_y = 2;
+    tiles[11][9].texture_x = 1; tiles[11][9].texture_y = 2;
+    tiles[11][10].texture_x = 1; tiles[11][10].texture_y= 2;
+    tiles[11][11].texture_x = 2; tiles[11][11].texture_y = 2;
+
+    tiles[12][12].texture_x = 19; tiles[12][12].texture_y = 7;
 
 };
 

@@ -273,17 +273,17 @@ int main(void) {
         mouse_point = GetMousePosition();
 
 
-        for (int i = 0; i < MAX_ENEMIES; i++) {
-            if (enemies[i].active) {
-                Rectangle rec = {enemies[i].position.x, enemies[i].position.y, 16, 16};
+        // for (int i = 0; i < MAX_ENEMIES; i++) {
+        //     if (enemies[i].active) {
+        //         Rectangle rec = {enemies[i].position.x, enemies[i].position.y, 16, 16};
         
-                if (CheckCollisionCircleRec(bullet[i].position, bullet[i].radius, rec)) {
-                    enemies[i].health = 0;
-                    enemies[i].active = false;
-                    bullet[i].active = false;
-                }
-            }
-        }
+        //         if (CheckCollisionCircleRec(bullet[i].position, bullet[i].radius, rec)) {
+        //             enemies[i].health = 0;
+        //             enemies[i].active = false;
+        //             bullet[i].active = false;
+        //         }
+        //     }
+        // }
         
         update_tiles_on_mouse(mouse_point, tiles);
         path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
@@ -375,24 +375,39 @@ int main(void) {
 
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+                            
 
                             // DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
                             //     x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
                     }
                     
+                    Rectangle source;
+                    source.x = (float)tiles[12][12].texture_x * TILE_WIDTH;
+                    source.y = (float)tiles[12][12].texture_y * TILE_HEIGHT;
+                    source.width = (float)TILE_WIDTH;
+                    source.height = (float)TILE_HEIGHT;
+        
+                    Rectangle dest;
+                    dest.x = (float)(tiles[10][5].position.x);
+                    dest.y = (float)(tiles[10][5].position.y);
+                    dest.width = 64;
+                    dest.height = 64;
+                    Vector2 origin = {0, 0};
+                    DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+
                     // Draw the path if found
                     if (path_found) {
                         Color pathColor = ColorAlpha(BLUE, 0.5f);
                         drawPath(path, path_length, pathColor);
                     }
                     
-                    for (int i = 0; i < MAX_ENEMIES; i++){
-                        if (bullet[i].active == true){
-                            shoot_bullet(&bullet[i].position, enemies[0].position, 5.0f);
-                            DrawCircleV(bullet[i].position, bullet[i].radius, BLACK);
-                        }
-                    }
+                    // for (int i = 0; i < MAX_BULLETS; i++){
+                    //     if (bullet[i].active == true){
+                    //         shoot_bullet(&bullet[i].position, enemies[0].position, 5.0f);
+                    //         DrawCircleV(bullet[i].position, bullet[i].radius, BLACK);
+                    //     }
+                    // }
 
                     // Draw the enemies
                     drawEnemies();
