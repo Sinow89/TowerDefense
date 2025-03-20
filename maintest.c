@@ -160,6 +160,7 @@ void spawnEnemy(Vector2 position) {
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (!enemies[i].active) {
             enemies[i].position = position;
+            enemies[i].health = 100; 
             enemies[i].active = true;
             enemies[i].current_path_index = 0;
             enemies[i].velocity = (Vector2){0, 0};
@@ -292,7 +293,7 @@ void update_bullets(bullets_t bullets[MAX_BULLETS], enemy_t enemies[MAX_ENEMIES]
             // Check collisions
             for (int i = 0; i < MAX_ENEMIES; i++) {
                 if (enemies[i].active) {
-                    Rectangle rec = {enemies[i].position.x - 8, enemies[i].position.y - 8, 16, 16};  // Adjust size to match enemy
+                    Rectangle rec = {enemies[i].position.x - 32, enemies[i].position.y - 32, 32, 32};  // Adjust size to match enemy
                     if (CheckCollisionCircleRec(bullets[b].position, bullets[b].radius, rec)) {
                         enemies[i].health -= 25;  // Deal damage - adjust as needed
                         if (enemies[i].health <= 0) {
@@ -390,11 +391,11 @@ int main(void) {
     // Initialize bullets
     for (int i = 0; i < MAX_BULLETS; i++) {
         bullets[i].active = false;
-        bullets[i].radius = 5.0f;
-        bullets[i].texture_x = 21;  // Your bullet sprite coordinates
+        bullets[i].radius = 10.0f;
+        bullets[i].texture_x = 21;
         bullets[i].texture_y = 10;
-        bullets[i].speed = 300.0f;  // Bullet speed
-        bullets[i].damage = 25;     // Damage per hit
+        bullets[i].speed = 300.0f;
+        bullets[i].damage = 25;
         bullets[i].rotation = 0.0f;
         bullets[i].position = (Vector2){0, 0};
         bullets[i].velocity = (Vector2){0, 0};
