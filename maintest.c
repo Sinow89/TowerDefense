@@ -53,8 +53,10 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
                     overlayTiles[i][j].texture_y = 7;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-                    tiles[i][j].type = SAND;
-                    tiles[i][j].texture_x = 19;  tiles[i][j].texture_y = 7;
+                    tiles[i][j].type = FLOOR;
+
+                    tiles[i][j].texture_x = 1;  tiles[i][j].texture_y = 1;
+                    overlayTiles[i][j].active = false;
                 }
             }
         }
