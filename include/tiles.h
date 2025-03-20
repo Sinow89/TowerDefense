@@ -18,8 +18,10 @@ typedef enum tiles_type{
 
 typedef struct {
     bool active;
-    int texture_x;
-    int texture_y;
+    int texture_x_body;
+    int texture_y_body;
+    int texture_x_cannon;
+    int texture_y_cannon;
 } overlay_t;
 
 overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH];

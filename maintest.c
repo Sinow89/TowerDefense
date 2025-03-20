@@ -49,8 +49,11 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
                     tiles[i][j].type = WALL;
 
                     overlayTiles[i][j].active = true;
-                    overlayTiles[i][j].texture_x = 19;
-                    overlayTiles[i][j].texture_y = 7;
+                    overlayTiles[i][j].texture_x_body = 19;
+                    overlayTiles[i][j].texture_y_body = 7;
+
+                    overlayTiles[i][j].texture_x_cannon = 20;
+                    overlayTiles[i][j].texture_y_cannon = 8;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
                     tiles[i][j].type = FLOOR;
@@ -253,12 +256,17 @@ void draw_overlay_tiles(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayT
 
             if (overlayTiles[i][j].active) {
                 
-                tiles_t overlayTile = {0};
-                overlayTile.texture_x = overlayTiles[i][j].texture_x;
-                overlayTile.texture_y = overlayTiles[i][j].texture_y;
-                overlayTile.position = position;
-                
-                DrawTile(textures[TEXTURE_TILE_MAP], overlayTile, position, 1.0f, 0.0f);
+                tiles_t bodyTile = {0};
+                bodyTile.texture_x = overlayTiles[i][j].texture_x_body;
+                bodyTile.texture_y = overlayTiles[i][j].texture_y_body;
+                bodyTile.position = position;
+                DrawTile(textures[TEXTURE_TILE_MAP], bodyTile, position, 1.0f, 0.0f);
+
+                tiles_t cannonTile = {0};
+                cannonTile.texture_x = overlayTiles[i][j].texture_x_cannon;
+                cannonTile.texture_y = overlayTiles[i][j].texture_y_cannon;
+                cannonTile.position = position;
+                DrawTile(textures[TEXTURE_TILE_MAP], cannonTile, position, 1.0f, 0.0f);
             }
         }
     }
