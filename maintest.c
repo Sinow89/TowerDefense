@@ -259,7 +259,7 @@ int main(void) {
     path_found = false;
     path_length = 0;
     goal_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
-    goal_position.y = 11 * TILE_HEIGHT + (TILE_HEIGHT / 2);
+    goal_position.y = 10 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
     initEnemies();
     
