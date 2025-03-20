@@ -232,13 +232,14 @@ float GetRotationFromVelocity(Vector2 velocity) {
     return angle;
 }
 
-void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH], enemy_t enemies[MAX_ENEMIES]) {
+void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH], enemy_t enemies[MAX_ENEMIES], float delta_time) {
+    static float fire_timer[MAP_HEIGHT][MAP_WIDTH] = {0};
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
             if (overlayTiles[i][j].active) {
                 Vector2 tower_pos = { 
-                    tiles[i][j].position.x + TILE_WIDTH/2, 
-                    tiles[i][j].position.y + TILE_HEIGHT/2 
+                    tiles[i][j].position.x,
+                    tiles[i][j].position.y,
                 };
                 
                 // Find nearest enemy
@@ -261,7 +262,65 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
                     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
                 }
+
+                fire_timer[i][j] += delta_time;
+                float fire_rate = 1.0f;  // Shoot every 1 second - adjust as needed
+                if (min_dist < 200.0f && fire_timer[i][j] >= fire_rate) {  // Range check (200 pixels)
+                    fire_timer[i][j] = 0.0f;  // Reset timer
+                    for (int b = 0; b < MAX_BULLETS; b++) {
+                        if (!bullets[b].active) {
+                            bullets[b].position = tower_pos;
+                            bullets[b].velocity = Vector2Scale(Vector2Normalize(direction), bullets[b].speed);
+                            bullets[b].active = true;
+                            bullets[b].rotation = overlayTiles[i][j].cannon_rotation;
+                            bullets[b].damage = 25;  // Ensure damage is set
+                            break;
+                        }
+                    }
+                }
             }
+        }
+    }
+}
+
+void update_bullets(bullets_t bullets[MAX_BULLETS], enemy_t enemies[MAX_ENEMIES], float delta_time) {
+    for (int b = 0; b < MAX_BULLETS; b++) {
+        if (bullets[b].active) {
+            // Move bullet
+            bullets[b].position = Vector2Add(bullets[b].position, Vector2Scale(bullets[b].velocity, delta_time));
+
+            // Check collisions
+            for (int i = 0; i < MAX_ENEMIES; i++) {
+                if (enemies[i].active) {
+                    Rectangle rec = {enemies[i].position.x - 8, enemies[i].position.y - 8, 16, 16};  // Adjust size to match enemy
+                    if (CheckCollisionCircleRec(bullets[b].position, bullets[b].radius, rec)) {
+                        enemies[i].health -= 25;  // Deal damage - adjust as needed
+                        if (enemies[i].health <= 0) {
+                            enemies[i].active = false;
+                        }
+                        bullets[b].active = false;
+                        break;
+                    }
+                }
+            }
+
+            // Deactivate if off-screen
+            if (bullets[b].position.x < 0 || bullets[b].position.x > screen_width ||
+                bullets[b].position.y < 0 || bullets[b].position.y > screen_height) {
+                bullets[b].active = false;
+            }
+        }
+    }
+}
+
+void draw_bullets(bullets_t bullets[MAX_BULLETS]) {
+    for (int b = 0; b < MAX_BULLETS; b++) {
+        if (bullets[b].active) {
+            tiles_t bulletTile = {0};
+            bulletTile.texture_x = 21;
+            bulletTile.texture_y = 10;
+            bulletTile.position = bullets[b].position;
+            DrawTile(textures[TEXTURE_TILE_MAP], bulletTile, bullets[b].position, 1.0f, bullets[b].rotation);  // Scale 0.5 for smaller bullet
         }
     }
 }
@@ -315,6 +374,31 @@ void shoot_bullet(Vector2 *bulletPos, Vector2 enemyPos, float speed) {
 
 int main(void) {
     create_tiles();
+
+    overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH];
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            overlayTiles[i][j].active = false;
+            overlayTiles[i][j].texture_x_body = 0;
+            overlayTiles[i][j].texture_y_body = 0;
+            overlayTiles[i][j].texture_x_cannon = 0;
+            overlayTiles[i][j].texture_y_cannon = 0;
+            overlayTiles[i][j].cannon_rotation = 0.0f;
+        }
+    }
+
+    // Initialize bullets
+    for (int i = 0; i < MAX_BULLETS; i++) {
+        bullets[i].active = false;
+        bullets[i].radius = 5.0f;
+        bullets[i].texture_x = 21;  // Your bullet sprite coordinates
+        bullets[i].texture_y = 10;
+        bullets[i].speed = 300.0f;  // Bullet speed
+        bullets[i].damage = 25;     // Damage per hit
+        bullets[i].rotation = 0.0f;
+        bullets[i].position = (Vector2){0, 0};
+        bullets[i].velocity = (Vector2){0, 0};
+    }
 
     InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
@@ -382,7 +466,8 @@ int main(void) {
         }
         
         updateEnemies(delta_time, info);
-        update_tower_rotation(tiles, overlayTiles, enemies);
+        update_tower_rotation(tiles, overlayTiles, enemies, delta_time);
+        update_bullets(bullets, enemies, delta_time);
 
         switch (current_screen) {
             case LOGO:
@@ -461,6 +546,7 @@ int main(void) {
                         }
                     }
                     draw_overlay_tiles(tiles,  overlayTiles);
+                    draw_bullets(bullets);
                     DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][12], (Vector2){320,640}, 1.0f, 0.0F);
 
                     // Draw the path if found

@@ -7,9 +7,12 @@ typedef struct{
     Vector2 position;
     Vector2 velocity;
     float radius;
+    float rotation;
     float speed;
     int damage;
     bool active;
+    int texture_x;
+    int texture_y;
 } bullets_t;
 
 typedef struct{
@@ -17,6 +20,6 @@ typedef struct{
     Vector2 size;
 } tower_t;
 
-bullets_t bullet[MAX_BULLETS] = {350, 300, 0, 0, 10, 10, 10, true};
+bullets_t bullets[MAX_BULLETS];
 
 #endif // tower.h
