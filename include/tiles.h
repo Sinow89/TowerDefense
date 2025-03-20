@@ -26,6 +26,49 @@ typedef struct tiles_t{
 
 tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 
+void DrawSprite(Texture2D texture, int srcX, int srcY, int srcWidth, int srcHeight, 
+    Vector2 position, float scale, float rotation, Color tint) {
+        Rectangle source = {
+        .x = (float)srcX,
+        .y = (float)srcY,
+        .width = (float)srcWidth,
+        .height = (float)srcHeight
+        };
+
+        Rectangle dest = {
+        .x = position.x,
+        .y = position.y,
+        .width = srcWidth * scale,
+        .height = srcHeight * scale
+    };
+    
+    Vector2 origin = {0, 0};
+        if (rotation != 0.0f) {
+            origin.x = dest.width / 2.0f;
+            origin.y = dest.height / 2.0f;
+            
+            // Adjust position to account for rotation around center
+            dest.x += origin.x;
+            dest.y += origin.y;
+        }
+
+    DrawTexturePro(texture, source, dest, origin, rotation, tint);
+}
+
+void DrawTile(Texture2D tileTexture, tiles_t sourceTile, Vector2 position, float scale, float rotation) {
+    DrawSprite(
+        tileTexture,
+        sourceTile.texture_x * TILE_WIDTH,
+        sourceTile.texture_y * TILE_HEIGHT,
+        TILE_WIDTH,
+        TILE_HEIGHT,
+        position,
+        scale,
+        rotation,
+        WHITE
+    );
+}
+
 void create_tiles()
 {
     for (int y = 0; y < MAP_HEIGHT; y++){
@@ -196,6 +239,7 @@ void create_tiles()
     tiles[11][11].texture_x = 2; tiles[11][11].texture_y = 2;
 
     tiles[12][12].texture_x = 19; tiles[12][12].texture_y = 7;
+    tiles[12][1].texture_x = 15; tiles[12][1].texture_y = 10;
 
 };
 

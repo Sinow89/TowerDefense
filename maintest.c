@@ -215,6 +215,14 @@ void updateEnemies(float delta_time, PathInfo info[MAP_HEIGHT][MAP_WIDTH]) {
     }
 }
 
+float GetRotationFromVelocity(Vector2 velocity) {
+    if (velocity.x == 0 && velocity.y == 0) return 0.0f;
+    
+    float angle = atan2f(velocity.y, velocity.x) * RAD2DEG;
+    
+    return angle;
+}
+
 // Function to draw all enemies
 void drawEnemies(void) {
     int i;
@@ -224,7 +232,9 @@ void drawEnemies(void) {
             position.x = enemies[i].position.x - enemies[i].size.x/2;
             position.y = enemies[i].position.y - enemies[i].size.y/2;
 
-            DrawRectangleV(position, enemies[i].size, RED);
+            float rotation = GetRotationFromVelocity(enemies[i].velocity);
+
+            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][1], position, 1.0f, rotation);
         }
     }
 }
@@ -382,19 +392,7 @@ int main(void) {
                         }
                     }
                     
-                    Rectangle source;
-                    source.x = (float)tiles[12][12].texture_x * TILE_WIDTH;
-                    source.y = (float)tiles[12][12].texture_y * TILE_HEIGHT;
-                    source.width = (float)TILE_WIDTH;
-                    source.height = (float)TILE_HEIGHT;
-        
-                    Rectangle dest;
-                    dest.x = (float)(tiles[10][5].position.x);
-                    dest.y = (float)(tiles[10][5].position.y);
-                    dest.width = 64;
-                    dest.height = 64;
-                    Vector2 origin = {0, 0};
-                    DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
+                    DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][12], (Vector2){320,640}, 1.0f, 0.0F);
 
                     // Draw the path if found
                     if (path_found) {
