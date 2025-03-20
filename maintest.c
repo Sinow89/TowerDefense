@@ -262,6 +262,9 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                 if (direction.x != 0 || direction.y != 0) {  // Avoid division by zero
                     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
                     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
+                    printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f, Rotation: %f\n",
+                        tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
+                        direction.x, direction.y, angle, overlayTiles[i][j].cannon_rotation);
                 }
 
                 fire_timer[i][j] += delta_time;
