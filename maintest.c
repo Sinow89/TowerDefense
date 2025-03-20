@@ -11,8 +11,8 @@
 #include "map.h"
 #include "tower.h"
 
-const int screen_width = MAP_WIDTH * TILE_WIDTH;
-const int screen_height = MAP_HEIGHT * TILE_HEIGHT;
+const int screen_width = 12 * TILE_WIDTH;
+const int screen_height = 12 * TILE_HEIGHT;
 const int key = 0;
 int path_length = 0;
 Vector2 goal_position = {0, 0};
