@@ -16,6 +16,14 @@ typedef enum tiles_type{
     TOWER,
 } tiles_type;
 
+typedef struct {
+    bool active;
+    int texture_x;
+    int texture_y;
+} overlay_t;
+
+overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH];
+
 typedef struct tiles_t{
     Vector2 position;
     Vector2 size;
@@ -41,7 +49,7 @@ void DrawSprite(Texture2D texture, int srcX, int srcY, int srcWidth, int srcHeig
         .width = srcWidth * scale,
         .height = srcHeight * scale
     };
-    
+
     Vector2 origin = {0, 0};
         if (rotation != 0.0f) {
             origin.x = dest.width / 2.0f;

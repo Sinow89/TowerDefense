@@ -39,7 +39,7 @@ typedef enum{
 
 Texture2D textures[MAX_TEXTURES];
 
-void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH]) {
+void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH],overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH]) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
             Rectangle tile_rect = { tiles[i][j].position.x, tiles[i][j].position.y, TILE_WIDTH, TILE_HEIGHT };
@@ -47,11 +47,14 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
             if (CheckCollisionPointRec(mouse_point, tile_rect)) {
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
                     tiles[i][j].type = WALL;
-                    tiles[i][j].texture_x = 11;  tiles[i][j].texture_y = 1;
+
+                    overlayTiles[i][j].active = true;
+                    overlayTiles[i][j].texture_x = 19;
+                    overlayTiles[i][j].texture_y = 7;
                 }
                 if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
                     tiles[i][j].type = SAND;
-                    tiles[i][j].texture_x = 11;  tiles[i][j].texture_y = 10;
+                    tiles[i][j].texture_x = 19;  tiles[i][j].texture_y = 7;
                 }
             }
         }
@@ -239,6 +242,25 @@ void drawEnemies(void) {
     }
 }
 
+
+void draw_overlay_tiles(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH]) {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            Vector2 position = { tiles[i][j].position.x, tiles[i][j].position.y };
+
+            if (overlayTiles[i][j].active) {
+                
+                tiles_t overlayTile = {0};
+                overlayTile.texture_x = overlayTiles[i][j].texture_x;
+                overlayTile.texture_y = overlayTiles[i][j].texture_y;
+                overlayTile.position = position;
+                
+                DrawTile(textures[TEXTURE_TILE_MAP], overlayTile, position, 1.0f, 0.0f);
+            }
+        }
+    }
+}
+
 void shoot_bullet(Vector2 *bulletPos, Vector2 enemyPos, float speed) {
     Vector2 direction = Vector2Subtract(enemyPos, *bulletPos);
     direction = Vector2Normalize(direction);
@@ -295,7 +317,7 @@ int main(void) {
         //     }
         // }
         
-        update_tiles_on_mouse(mouse_point, tiles);
+        update_tiles_on_mouse(mouse_point, tiles, overlayTiles);
         path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
         
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
@@ -391,7 +413,7 @@ int main(void) {
                             //     x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
                     }
-                    
+                    draw_overlay_tiles(tiles,  overlayTiles);
                     DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][12], (Vector2){320,640}, 1.0f, 0.0F);
 
                     // Draw the path if found
