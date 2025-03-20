@@ -239,7 +239,8 @@ void drawEnemies(void) {
 
             float rotation = GetRotationFromVelocity(enemies[i].velocity);
 
-            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][1], position, 1.0f, rotation);
+            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][2], position, 1.0f, rotation);
+            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][3], position, 1.0f, rotation);
         }
     }
 }

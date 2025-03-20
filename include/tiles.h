@@ -247,8 +247,13 @@ void create_tiles()
     tiles[11][11].texture_x = 2; tiles[11][11].texture_y = 2;
 
     tiles[12][12].texture_x = 19; tiles[12][12].texture_y = 7;
+    
+    //Soldier tile
     tiles[12][1].texture_x = 15; tiles[12][1].texture_y = 10;
 
+    //Tank tile
+    tiles[12][2].texture_x = 15; tiles[12][2].texture_y = 11;
+    tiles[12][3].texture_x = 15; tiles[12][3].texture_y = 12;
 };
 
 #endif // tiles.h
