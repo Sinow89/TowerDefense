@@ -22,6 +22,7 @@ typedef struct {
     int texture_y_body;
     int texture_x_cannon;
     int texture_y_cannon;
+    float cannon_rotation;
 } overlay_t;
 
 overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH];

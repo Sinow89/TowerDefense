@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <float.h>
 #include "raylib.h"
 #include "bfs.h"
 #include "map.h"
@@ -231,6 +232,40 @@ float GetRotationFromVelocity(Vector2 velocity) {
     return angle;
 }
 
+void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH], enemy_t enemies[MAX_ENEMIES]) {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            if (overlayTiles[i][j].active) {
+                Vector2 tower_pos = { 
+                    tiles[i][j].position.x + TILE_WIDTH/2, 
+                    tiles[i][j].position.y + TILE_HEIGHT/2 
+                };
+                
+                // Find nearest enemy
+                float min_dist = FLT_MAX;
+                Vector2 target_pos = tower_pos;  // Default to current position if no enemy found
+                
+                for (int e = 0; e < MAX_ENEMIES; e++) {
+                    if (enemies[e].active) {
+                        float dist = Vector2Distance(tower_pos, enemies[e].position);
+                        if (dist < min_dist) {
+                            min_dist = dist;
+                            target_pos = enemies[e].position;
+                        }
+                    }
+                }
+                
+                // Calculate rotation towards target
+                Vector2 direction = Vector2Subtract(target_pos, tower_pos);
+                if (direction.x != 0 || direction.y != 0) {  // Avoid division by zero
+                    float angle = atan2f(direction.y, direction.x) * RAD2DEG;
+                    overlayTiles[i][j].cannon_rotation = angle + 90.0f;
+                }
+            }
+        }
+    }
+}
+
 // Function to draw all enemies
 void drawEnemies(void) {
     int i;
@@ -266,7 +301,7 @@ void draw_overlay_tiles(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayT
                 cannonTile.texture_x = overlayTiles[i][j].texture_x_cannon;
                 cannonTile.texture_y = overlayTiles[i][j].texture_y_cannon;
                 cannonTile.position = position;
-                DrawTile(textures[TEXTURE_TILE_MAP], cannonTile, position, 1.0f, 0.0f);
+                DrawTile(textures[TEXTURE_TILE_MAP], cannonTile, position, 1.0f, overlayTiles[i][j].cannon_rotation);
             }
         }
     }
@@ -347,6 +382,7 @@ int main(void) {
         }
         
         updateEnemies(delta_time, info);
+        update_tower_rotation(tiles, overlayTiles, enemies);
 
         switch (current_screen) {
             case LOGO:
