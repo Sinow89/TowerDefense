@@ -239,8 +239,8 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
         for (int j = 0; j < MAP_WIDTH; j++) {
             if (overlayTiles[i][j].active) {
                 Vector2 tower_pos = { 
-                    tiles[i][j].position.x,
-                    tiles[i][j].position.y,
+                    tiles[i][j].position.x + TILE_WIDTH/2,
+                    tiles[i][j].position.y + TILE_HEIGHT/2
                 };
                 
                 // Find nearest enemy
@@ -258,13 +258,28 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                 }
                 
                 // Calculate rotation towards target
+                // Vector2 direction = Vector2Subtract(target_pos, tower_pos);
+                // if (direction.x != 0 || direction.y != 0) {  // Avoid division by zero
+                //     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
+                //     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
+                //     printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f, Rotation: %f\n",
+                //         tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
+                //         direction.x, direction.y, angle, overlayTiles[i][j].cannon_rotation);
+                // }
+
+
                 Vector2 direction = Vector2Subtract(target_pos, tower_pos);
-                if (direction.x != 0 || direction.y != 0) {  // Avoid division by zero
-                    float angle = atan2f(direction.y, direction.x) * RAD2DEG;
+                if (direction.x != 0 || direction.y != 0) {
+                    float length = Vector2Length(direction);
+                    Vector2 norm_dir = {direction.x / length, direction.y / length};
+                    float angle = acosf(norm_dir.x) * RAD2DEG;
+                    if (norm_dir.y < 0) {
+                        angle = -angle;  // Up is negative y
+                    }
                     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
-                    printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f, Rotation: %f\n",
-                        tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
-                        direction.x, direction.y, angle, overlayTiles[i][j].cannon_rotation);
+                    printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f\n",
+                           tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
+                           direction.x, direction.y, angle);
                 }
 
                 fire_timer[i][j] += delta_time;
@@ -278,6 +293,9 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                             bullets[b].active = true;
                             bullets[b].rotation = overlayTiles[i][j].cannon_rotation;
                             bullets[b].damage = 25;  // Ensure damage is set
+                            printf("Bullet %d spawned at (%f, %f), Tower at (%f, %f), Rotation: %f\n",
+                                b, bullets[b].position.x, bullets[b].position.y,
+                                tower_pos.x, tower_pos.y, bullets[b].rotation);
                             break;
                         }
                     }
