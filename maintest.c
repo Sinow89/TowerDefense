@@ -331,9 +331,6 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                             bullets[b].active = true;
                             bullets[b].rotation = overlayTiles[i][j].cannon_rotation;
                             bullets[b].damage = 25;  // Ensure damage is set
-                            printf("Bullet %d spawned at (%f, %f), Tower at (%f, %f), Rotation: %f\n",
-                                b, bullets[b].position.x, bullets[b].position.y,
-                                tower_pos.x, tower_pos.y, bullets[b].rotation);
                             break;
                         }
                     }
@@ -473,7 +470,7 @@ int main(void) {
     InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
 
-    GameScreen current_screen = GAMEPLAY;
+    GameScreen current_screen = LOGO;
     Vector2 enemy_pos = {200, 200};
     Vector2 mouse_point = { 0.0f, 0.0f };
     
@@ -505,7 +502,7 @@ int main(void) {
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
         
-        update_tiles_on_mouse(mouse_point, tiles, overlayTiles, enemies);
+        
 
 
         switch (current_screen) {
@@ -564,6 +561,7 @@ int main(void) {
                     int texture_index_x = 0;
                     int texture_index_y = 0;
                     int x, y;
+                    update_tiles_on_mouse(mouse_point, tiles, overlayTiles, enemies);
 
                     path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
         
@@ -598,8 +596,6 @@ int main(void) {
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
                             
                             DrawText(TextFormat("Health: %d", hp), 5, 5, 30, WHITE);
-                            // DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
-                            //     x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
                     }
                     draw_overlay_tiles(tiles,  overlayTiles);
@@ -618,7 +614,7 @@ int main(void) {
                 case ENDING:
                 {
                     DrawRectangle(0, 0, screen_width, screen_height, BLACK);
-                    DrawText("Game over general!", 100, 150, 60, RED);
+                    DrawText("Game over General!", 100, 150, 60, RED);
                     DrawText("Press Enter to play again", 240, 300, 20, RED);
                 } break;
                 default: break;
