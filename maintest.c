@@ -18,7 +18,7 @@ const int key = 0;
 int path_length = 0;
 Vector2 goal_position = {0, 0};
 bool path_found = false;
-int hp = 100;
+int hp;
 int max_tower = 0;
 
 typedef enum GameScreen{ 
@@ -480,8 +480,6 @@ int main(void) {
     goal_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
     goal_position.y = 10 * TILE_HEIGHT + (TILE_HEIGHT / 2);
     
-    initEnemies();
-    
     Vector2 spawn_position;
     spawn_position.x = 5 * TILE_WIDTH + (TILE_WIDTH / 2);
     spawn_position.y = 0 * TILE_HEIGHT + (TILE_HEIGHT / 2);
@@ -502,9 +500,6 @@ int main(void) {
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
         
-        
-
-
         switch (current_screen) {
             case LOGO:
             {
@@ -555,6 +550,8 @@ int main(void) {
                     DrawText("Right-click to remove them", 100, 300, 20, GRAY);
                     DrawText("Enemies will spawn and follow the path to the goal", 100, 350, 20, GRAY);
                     DrawText("Press Space to start the game", 100, 400, 20, WHITE);
+                    initEnemies();
+                    hp = 100;
                 } break;
                 case GAMEPLAY:
                 {
