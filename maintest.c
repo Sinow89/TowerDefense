@@ -39,13 +39,47 @@ typedef enum{
 
 Texture2D textures[MAX_TEXTURES];
 
-void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH],overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH]) {
+typedef struct enemy_t {
+    Vector2 position;
+    Vector2 size;
+    float speed;
+    int health;
+    bool active;
+    int current_path_index;
+    Point path[MAP_WIDTH * MAP_HEIGHT]; // Individual path for this enemy
+    int path_length;
+    Vector2 velocity;
+    EnemyType type;
+    int texture_x_bottom;
+    int texture_y_bottom;
+    int texture_x_top;
+    int texture_y_top;
+} enemy_t;
+
+enemy_t enemies[MAX_ENEMIES];
+
+void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WIDTH],overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH], enemy_t enemies[MAX_ENEMIES] ) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
             Rectangle tile_rect = { tiles[i][j].position.x, tiles[i][j].position.y, TILE_WIDTH, TILE_HEIGHT };
-
             if (CheckCollisionPointRec(mouse_point, tile_rect)) {
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (max_tower >= 0 && max_tower <= 3) && tiles[i][j].type != SAND){
+                bool enemy_collision = false;
+                for (int e = 0; e < MAX_ENEMIES; e++) {
+                    if (enemies[e].active) {
+                        Rectangle enemy_rect = {
+                            enemies[e].position.x - enemies[e].size.x / 2,
+                            enemies[e].position.y - enemies[e].size.y / 2,
+                            enemies[e].size.x,
+                            enemies[e].size.y
+                        };
+                        if (CheckCollisionRecs(tile_rect, enemy_rect)) {
+                            enemy_collision = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (max_tower >= 0 && max_tower <= 3) && tiles[i][j].type != SAND && !enemy_collision) {
                     tiles[i][j].type = WALL;
 
                     overlayTiles[i][j].active = true;
@@ -127,25 +161,6 @@ Vector2 moveAlongPath(Vector2 current_pos, Point *path, int path_length, int *cu
     
     return current_pos;
 }
-
-typedef struct enemy_t {
-    Vector2 position;
-    Vector2 size;
-    float speed;
-    int health;
-    bool active;
-    int current_path_index;
-    Point path[MAP_WIDTH * MAP_HEIGHT]; // Individual path for this enemy
-    int path_length;
-    Vector2 velocity;
-    EnemyType type;
-    int texture_x_bottom;
-    int texture_y_bottom;
-    int texture_x_top;
-    int texture_y_top;
-} enemy_t;
-
-enemy_t enemies[MAX_ENEMIES];
 
 // Function to initialize enemies
 void initEnemies(void) {
@@ -490,7 +505,7 @@ int main(void) {
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
         
-        update_tiles_on_mouse(mouse_point, tiles, overlayTiles);
+        update_tiles_on_mouse(mouse_point, tiles, overlayTiles, enemies);
 
 
         switch (current_screen) {
