@@ -40,7 +40,7 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
             Rectangle tile_rect = { tiles[i][j].position.x, tiles[i][j].position.y, TILE_WIDTH, TILE_HEIGHT };
 
             if (CheckCollisionPointRec(mouse_point, tile_rect)) {
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (max_tower >= 0 && max_tower <= 3)){
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (max_tower >= 0 && max_tower <= 3) && tiles[i][j].type != SAND){
                     tiles[i][j].type = WALL;
 
                     overlayTiles[i][j].active = true;
@@ -156,7 +156,7 @@ void spawnEnemy(Vector2 position) {
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (!enemies[i].active) {
             enemies[i].position = position;
-            enemies[i].health = 100; 
+            enemies[i].health = 250; 
             enemies[i].active = true;
             enemies[i].current_path_index = 0;
             enemies[i].velocity = (Vector2){0, 0};

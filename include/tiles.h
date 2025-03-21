@@ -88,8 +88,23 @@ void create_tiles()
             tiles[y][x].position.x = x * TILE_WIDTH;
             tiles[y][x].type = FLOOR;
 
-            tiles[y][x].texture_x = 1;
-            tiles[y][x].texture_y = 1;
+            tiles[3][6].type = SAND;  
+            tiles[3][7].type = SAND; 
+
+            tiles[2][6].type = SAND;
+            tiles[2][7].type = SAND;
+
+            tiles[2][1].type = SAND;
+            tiles[2][2].type = SAND;
+
+            tiles[1][1].type = SAND; 
+            tiles[1][2].type = SAND;
+
+            tiles[5][5].type = SAND; 
+            tiles[6][6].type = SAND;
+
+            tiles[5][6].type = SAND; 
+            tiles[6][5].type = SAND;
         }
     }
 
@@ -107,8 +122,8 @@ void create_tiles()
     tiles[0][11].texture_x = 2; tiles[0][11].texture_y = 0;
     
     tiles[1][0].texture_x = 0;  tiles[1][0].texture_y = 1;
-    tiles[1][1].texture_x = 1;  tiles[1][1].texture_y = 1;
-    tiles[1][2].texture_x = 1;  tiles[1][2].texture_y = 1;
+    tiles[1][1].texture_x = 3;  tiles[1][1].texture_y = 6;
+    tiles[1][2].texture_x = 4;  tiles[1][2].texture_y = 6;
     tiles[1][3].texture_x = 1;  tiles[1][3].texture_y = 1;
     tiles[1][4].texture_x = 1;  tiles[1][4].texture_y = 1;
     tiles[1][5].texture_x = 1;  tiles[1][5].texture_y = 1;
@@ -120,13 +135,13 @@ void create_tiles()
     tiles[1][11].texture_x = 2; tiles[1][11].texture_y = 1;
     
     tiles[2][0].texture_x = 0;  tiles[2][0].texture_y = 1;
-    tiles[2][1].texture_x = 1;  tiles[2][1].texture_y = 1;
-    tiles[2][2].texture_x = 1;  tiles[2][2].texture_y = 1;
+    tiles[2][1].texture_x = 3;  tiles[2][1].texture_y = 7;
+    tiles[2][2].texture_x = 4;  tiles[2][2].texture_y = 7;
     tiles[2][3].texture_x = 1;  tiles[2][3].texture_y = 1;
     tiles[2][4].texture_x = 1;  tiles[2][4].texture_y = 1;
     tiles[2][5].texture_x = 1;  tiles[2][5].texture_y = 1;
-    tiles[2][6].texture_x = 1;  tiles[2][6].texture_y = 1;
-    tiles[2][7].texture_x = 1;  tiles[2][7].texture_y = 1;
+    tiles[2][6].texture_x = 3;  tiles[2][6].texture_y = 6;
+    tiles[2][7].texture_x = 4;  tiles[2][7].texture_y = 6;
     tiles[2][8].texture_x = 1;  tiles[2][8].texture_y = 1;
     tiles[2][9].texture_x = 1; tiles[2][9].texture_y = 1;
     tiles[2][10].texture_x = 1; tiles[2][10].texture_y = 1;
@@ -138,8 +153,8 @@ void create_tiles()
     tiles[3][3].texture_x = 1;  tiles[3][3].texture_y = 1;
     tiles[3][4].texture_x = 1;  tiles[3][4].texture_y = 1;
     tiles[3][5].texture_x = 1;  tiles[3][5].texture_y = 1;
-    tiles[3][6].texture_x = 1;  tiles[3][6].texture_y = 1;
-    tiles[3][7].texture_x = 1;  tiles[3][7].texture_y = 1;
+    tiles[3][6].texture_x = 3;  tiles[3][6].texture_y = 7;
+    tiles[3][7].texture_x = 4;  tiles[3][7].texture_y = 7;
     tiles[3][8].texture_x = 1;  tiles[3][8].texture_y = 1;
     tiles[3][9].texture_x = 1; tiles[3][9].texture_y = 1;
     tiles[3][10].texture_x = 1; tiles[3][10].texture_y = 1;
@@ -163,8 +178,8 @@ void create_tiles()
     tiles[5][2].texture_x = 1;  tiles[5][2].texture_y = 1;
     tiles[5][3].texture_x = 1;  tiles[5][3].texture_y = 1;
     tiles[5][4].texture_x = 1;  tiles[5][4].texture_y = 1;
-    tiles[5][5].texture_x = 1;  tiles[5][5].texture_y = 1;
-    tiles[5][6].texture_x = 1;  tiles[5][6].texture_y = 1;
+    tiles[5][5].texture_x = 3;  tiles[5][5].texture_y = 6;
+    tiles[5][6].texture_x = 4;  tiles[5][6].texture_y = 6;
     tiles[5][7].texture_x = 1;  tiles[5][7].texture_y = 1;
     tiles[5][8].texture_x = 1;  tiles[5][8].texture_y = 1;
     tiles[5][9].texture_x = 1; tiles[5][9].texture_y = 1;
@@ -176,8 +191,8 @@ void create_tiles()
     tiles[6][2].texture_x = 1;  tiles[6][2].texture_y = 1;
     tiles[6][3].texture_x = 1;  tiles[6][3].texture_y = 1;
     tiles[6][4].texture_x = 1;  tiles[6][4].texture_y = 1;
-    tiles[6][5].texture_x = 1;  tiles[6][5].texture_y = 1;
-    tiles[6][6].texture_x = 1;  tiles[6][6].texture_y = 1;
+    tiles[6][5].texture_x = 3;  tiles[6][5].texture_y = 7;
+    tiles[6][6].texture_x = 4;  tiles[6][6].texture_y = 7;
     tiles[6][7].texture_x = 1;  tiles[6][7].texture_y = 1;
     tiles[6][8].texture_x = 1;  tiles[6][8].texture_y = 1;
     tiles[6][9].texture_x = 1; tiles[6][9].texture_y = 1;
