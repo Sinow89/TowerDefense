@@ -18,6 +18,8 @@ const int key = 0;
 int path_length = 0;
 Vector2 goal_position = {0, 0};
 bool path_found = false;
+int hp = 100;
+int max_tower = 0;
 
 typedef enum GameScreen{ 
     LOGO,
@@ -25,14 +27,6 @@ typedef enum GameScreen{
     GAMEPLAY,
     ENDING
 } GameScreen;
-
-typedef struct player_t{
-    Vector2 position;
-    Vector2 size;
-    Vector2 velocity;
-    int hp;
-    int key;
-} player_t;
 
 typedef enum{
     TEXTURE_TILE_MAP = 0,
@@ -46,7 +40,7 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
             Rectangle tile_rect = { tiles[i][j].position.x, tiles[i][j].position.y, TILE_WIDTH, TILE_HEIGHT };
 
             if (CheckCollisionPointRec(mouse_point, tile_rect)) {
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (max_tower >= 0 && max_tower <= 3)){
                     tiles[i][j].type = WALL;
 
                     overlayTiles[i][j].active = true;
@@ -55,12 +49,14 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
 
                     overlayTiles[i][j].texture_x_cannon = 20;
                     overlayTiles[i][j].texture_y_cannon = 8;
+                    max_tower++;
                 }
-                if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+                if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && tiles[i][j].type == WALL) {
                     tiles[i][j].type = FLOOR;
 
                     tiles[i][j].texture_x = 1;  tiles[i][j].texture_y = 1;
                     overlayTiles[i][j].active = false;
+                    max_tower--;
                 }
             }
         }
@@ -194,6 +190,7 @@ void updateEnemies(float delta_time, PathInfo info[MAP_HEIGHT][MAP_WIDTH]) {
             
             if (info[tile_y][tile_x].parent_x < 0 || info[tile_y][tile_x].parent_y < 0) {
                 enemies[i].active = false;
+                hp = hp - 10;
                 continue;
             }
             
@@ -239,8 +236,8 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
         for (int j = 0; j < MAP_WIDTH; j++) {
             if (overlayTiles[i][j].active) {
                 Vector2 tower_pos = { 
-                    tiles[i][j].position.x + TILE_WIDTH/2,
-                    tiles[i][j].position.y + TILE_HEIGHT/2
+                    tiles[i][j].position.x,
+                    tiles[i][j].position.y
                 };
                 
                 // Find nearest enemy
@@ -256,17 +253,6 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                         }
                     }
                 }
-                
-                // Calculate rotation towards target
-                // Vector2 direction = Vector2Subtract(target_pos, tower_pos);
-                // if (direction.x != 0 || direction.y != 0) {  // Avoid division by zero
-                //     float angle = atan2f(direction.y, direction.x) * RAD2DEG;
-                //     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
-                //     printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f, Rotation: %f\n",
-                //         tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
-                //         direction.x, direction.y, angle, overlayTiles[i][j].cannon_rotation);
-                // }
-
 
                 Vector2 direction = Vector2Subtract(target_pos, tower_pos);
                 if (direction.x != 0 || direction.y != 0) {
@@ -347,7 +333,6 @@ void draw_bullets(bullets_t bullets[MAX_BULLETS]) {
     }
 }
 
-// Function to draw all enemies
 void drawEnemies(void) {
     int i;
     for (i = 0; i < MAX_ENEMIES; i++) {
@@ -363,7 +348,6 @@ void drawEnemies(void) {
         }
     }
 }
-
 
 void draw_overlay_tiles(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overlayTiles[MAP_HEIGHT][MAP_WIDTH]) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
@@ -444,7 +428,7 @@ int main(void) {
     float enemy_spawn_timer = 0;
     float enemy_spawn_interval = 3.0f;
 
-    int frames_counter = 0;
+    int frames_counter = 3;
 
     Image image = LoadImage("assets/towerDefense_tilesheet.png");
     textures[TEXTURE_TILE_MAP] = LoadTextureFromImage(image);
@@ -455,41 +439,9 @@ int main(void) {
     while (!WindowShouldClose()) { 
         float delta_time = GetFrameTime();
         mouse_point = GetMousePosition();
-
-
-        // for (int i = 0; i < MAX_ENEMIES; i++) {
-        //     if (enemies[i].active) {
-        //         Rectangle rec = {enemies[i].position.x, enemies[i].position.y, 16, 16};
-        
-        //         if (CheckCollisionCircleRec(bullet[i].position, bullet[i].radius, rec)) {
-        //             enemies[i].health = 0;
-        //             enemies[i].active = false;
-        //             bullet[i].active = false;
-        //         }
-        //     }
-        // }
         
         update_tiles_on_mouse(mouse_point, tiles, overlayTiles);
-        path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
-        
-        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            // Find path from enemy spawn to goal
-            // enemies[0].health = 0;
-            // if (enemies[0].health == 0){
-            //     enemies[0].active = false;
-            // }
-        }
-        
-        // Handle enemy spawning
-        enemy_spawn_timer += delta_time;
-        if (enemy_spawn_timer >= enemy_spawn_interval && path_found) {
-            spawnEnemy(spawn_position);
-            enemy_spawn_timer = 0;
-        }
-        
-        updateEnemies(delta_time, info);
-        update_tower_rotation(tiles, overlayTiles, enemies, delta_time);
-        update_bullets(bullets, enemies, delta_time);
+
 
         switch (current_screen) {
             case LOGO:
@@ -510,6 +462,9 @@ int main(void) {
                 if (IsKeyPressed(KEY_Q)) {
                     current_screen = ENDING;
                 }
+                if (hp == 0){
+                    current_screen = ENDING;
+                }
             } break;
             case ENDING:
             {
@@ -527,23 +482,36 @@ int main(void) {
                 case LOGO:
                 {
                     DrawRectangle(0, 0, screen_width, screen_height, BLACK);
-                    DrawText("Tower Defense", 400, 200, 150, WHITE);
-                    DrawText("by Christoffer Rozenbachs", 800, 350, 20, GRAY);
+                    DrawText("Tower Defense", 100, 200, 75, WHITE);
+                    DrawText("by Christoffer Rozenbachs", 100, 350, 20, GRAY);
                 } break;
                 case TITLE:
                 {
                     DrawRectangle(0, 0, screen_width, screen_height, BLACK);
-                    DrawText("How to play the game", 400, 150, 50, WHITE);
-                    DrawText("Left-click to place walls", 400, 250, 20, GRAY);
-                    DrawText("Right-click to set the goal", 400, 300, 20, GRAY);
-                    DrawText("Enemies will spawn and follow the path to the goal", 400, 350, 20, GRAY);
-                    DrawText("Press Space to start the game", 600, 600, 20, WHITE);
+                    DrawText("How to play the game", 100, 150, 50, WHITE);
+                    DrawText("Left-click to place Towers", 100, 250, 20, GRAY);
+                    DrawText("Right-click to remove them", 100, 300, 20, GRAY);
+                    DrawText("Enemies will spawn and follow the path to the goal", 100, 350, 20, GRAY);
+                    DrawText("Press Space to start the game", 100, 400, 20, WHITE);
                 } break;
                 case GAMEPLAY:
                 {
                     int texture_index_x = 0;
                     int texture_index_y = 0;
                     int x, y;
+
+                    path_found = findPath(tiles, info, goal_position, spawn_position, path, &path_length);
+        
+                    // Handle enemy spawning
+                    enemy_spawn_timer += delta_time;
+                    if (enemy_spawn_timer >= enemy_spawn_interval && path_found) {
+                        spawnEnemy(spawn_position);
+                        enemy_spawn_timer = 0;
+                    }
+                    
+                    updateEnemies(delta_time, info);
+                    update_tower_rotation(tiles, overlayTiles, enemies, delta_time);
+                    update_bullets(bullets, enemies, delta_time);
 
                     for (y = 0; y < MAP_HEIGHT; y++) {
                         for (x = 0; x < MAP_WIDTH; x++) {
@@ -562,7 +530,7 @@ int main(void) {
                             Vector2 origin = {0, 0};
                             DrawTexturePro(textures[TEXTURE_TILE_MAP], source, dest, origin, 0.0f, WHITE);
                             
-
+                            DrawText(TextFormat("Health: %d", hp), 5, 5, 30, WHITE);
                             // DrawText(TextFormat("%d, %d", info[y][x].parent_x, info[y][x].parent_y),
                             //     x * TILE_WIDTH + (TILE_WIDTH / 2), y * TILE_HEIGHT + (TILE_HEIGHT / 2), 16, WHITE);
                         }
@@ -576,38 +544,15 @@ int main(void) {
                         Color pathColor = ColorAlpha(BLUE, 0.5f);
                         drawPath(path, path_length, pathColor);
                     }
-                    
-                    // for (int i = 0; i < MAX_BULLETS; i++){
-                    //     if (bullet[i].active == true){
-                    //         shoot_bullet(&bullet[i].position, enemies[0].position, 5.0f);
-                    //         DrawCircleV(bullet[i].position, bullet[i].radius, BLACK);
-                    //     }
-                    // }
 
-                    // Draw the enemies
                     drawEnemies();
-                    
-                    // Draw the spawn point
-                    // DrawCircleV(spawn_position, 10, GREEN);
-                    
-                    // Draw the goal point
-                    // if (path_found) {
-                    //     DrawCircleV(goal_position, 10, PURPLE);
-                    // }
 
-                    // Draw UI information
-                    // char keyText[20];
-                    // sprintf(keyText, "Keys: %d", key);
-                    // DrawText(keyText, 20, 20, 20, WHITE);
-                    
-                    // DrawText("Left-click: Place wall", 20, 50, 20, WHITE);
-                    // DrawText("Right-click: Set goal", 20, 80, 20, WHITE);
                 } break;
                 case ENDING:
                 {
                     DrawRectangle(0, 0, screen_width, screen_height, BLACK);
-                    DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+                    DrawText("Game over general!", 100, 150, 60, RED);
+                    DrawText("Press Enter to play again", 240, 300, 20, RED);
                 } break;
                 default: break;
             }
