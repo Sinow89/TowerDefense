@@ -40,10 +40,10 @@ tiles_t tiles[MAP_HEIGHT][MAP_WIDTH];
 void DrawSprite(Texture2D texture, int srcX, int srcY, int srcWidth, int srcHeight, 
     Vector2 position, float scale, float rotation, Color tint) {
         Rectangle source = {
-        .x = (float)srcX,
-        .y = (float)srcY,
-        .width = (float)srcWidth,
-        .height = (float)srcHeight
+            .x = (float)srcX + 0.1f,         // Slight offset to avoid bleeding
+            .y = (float)srcY + 0.1f,
+            .width = (float)srcWidth - 0.2f, // Slight shrink to stay within tile
+            .height = (float)srcHeight - 0.2f
         };
 
         Rectangle dest = {

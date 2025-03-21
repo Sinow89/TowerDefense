@@ -28,6 +28,11 @@ typedef enum GameScreen{
     ENDING
 } GameScreen;
 
+typedef enum {
+    ENEMY_TANK,
+    ENEMY_SOLDIER
+} EnemyType;
+
 typedef enum{
     TEXTURE_TILE_MAP = 0,
 } texture_asset;
@@ -65,16 +70,16 @@ void update_tiles_on_mouse(Vector2 mouse_point, tiles_t tiles[MAP_HEIGHT][MAP_WI
 
 // Function to visualize the path
 void drawPath(Point *path, int path_length, Color color) {
-    int i;
-    for (i = 0; i < path_length; i++) {
-        DrawRectangle(
-            path[i].x * TILE_WIDTH + TILE_WIDTH/4,
-            path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
-            TILE_WIDTH/2,
-            TILE_HEIGHT/2,
-            color
-        );
-    }
+    // int i;
+    // for (i = 0; i < path_length; i++) {
+    //     DrawRectangle(
+    //         path[i].x * TILE_WIDTH + TILE_WIDTH/4,
+    //         path[i].y * TILE_HEIGHT + TILE_HEIGHT/4,
+    //         TILE_WIDTH/2,
+    //         TILE_HEIGHT/2,
+    //         color
+    //     );
+    // }
 }
 
 // Function to get the next position along a path
@@ -133,6 +138,11 @@ typedef struct enemy_t {
     Point path[MAP_WIDTH * MAP_HEIGHT]; // Individual path for this enemy
     int path_length;
     Vector2 velocity;
+    EnemyType type;
+    int texture_x_bottom;
+    int texture_y_bottom;
+    int texture_x_top;
+    int texture_y_top;
 } enemy_t;
 
 enemy_t enemies[MAX_ENEMIES];
@@ -147,11 +157,16 @@ void initEnemies(void) {
         enemies[i].health = 100;
         enemies[i].active = false;
         enemies[i].current_path_index = 0;
+        enemies[i].type = ENEMY_TANK;
+        enemies[i].texture_x_bottom = 15;  // tiles[12][2] - Tank bottom
+        enemies[i].texture_y_bottom = 11;
+        enemies[i].texture_x_top = 15;     // tiles[12][3] - Tank top
+        enemies[i].texture_y_top = 12;
     }
 }
 
 // Function to spawn a new enemy
-void spawnEnemy(Vector2 position) {
+void spawnEnemy(Vector2 position, EnemyType type) {
     int i;
     for (i = 0; i < MAX_ENEMIES; i++) {
         if (!enemies[i].active) {
@@ -160,6 +175,28 @@ void spawnEnemy(Vector2 position) {
             enemies[i].active = true;
             enemies[i].current_path_index = 0;
             enemies[i].velocity = (Vector2){0, 0};
+            enemies[i].type = type;
+
+            switch (type) {
+                case ENEMY_TANK:
+                    enemies[i].health = 250;
+                    enemies[i].speed = 100.0f;
+                    enemies[i].size = (Vector2){64, 64};
+                    enemies[i].texture_x_bottom = 15;
+                    enemies[i].texture_y_bottom = 11;
+                    enemies[i].texture_x_top = 15; 
+                    enemies[i].texture_y_top = 12;
+                    break;
+                case ENEMY_SOLDIER:
+                    enemies[i].health = 100;
+                    enemies[i].speed = 150.0f;
+                    enemies[i].size = (Vector2){32, 32};
+                    enemies[i].texture_x_bottom = 15;
+                    enemies[i].texture_y_bottom = 10;
+                    enemies[i].texture_x_top = 15;
+                    enemies[i].texture_y_top = 10;
+                    break;
+            }
             break;
         }
     }
@@ -342,9 +379,21 @@ void drawEnemies(void) {
             position.y = enemies[i].position.y - enemies[i].size.y/2;
 
             float rotation = GetRotationFromVelocity(enemies[i].velocity);
+            float scale = (enemies[i].type == ENEMY_SOLDIER) ? 0.7f : 1.0f;
 
-            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][2], position, 1.0f, rotation);
-            DrawTile(textures[TEXTURE_TILE_MAP], tiles[12][3], position, 1.0f, rotation);
+            tiles_t bottomTile = {0};
+            bottomTile.texture_x = enemies[i].texture_x_bottom;
+            bottomTile.texture_y = enemies[i].texture_y_bottom;
+            bottomTile.position = position;
+
+            tiles_t topTile = {0};
+            topTile.texture_x = enemies[i].texture_x_top;
+            topTile.texture_y = enemies[i].texture_y_top;
+            topTile.position = position;
+
+            DrawTile(textures[TEXTURE_TILE_MAP], bottomTile, position, scale, rotation);
+            DrawTile(textures[TEXTURE_TILE_MAP], topTile, position, scale, rotation);
+
         }
     }
 }
@@ -427,6 +476,7 @@ int main(void) {
     
     float enemy_spawn_timer = 0;
     float enemy_spawn_interval = 3.0f;
+    int spawn_counter = 0;
 
     int frames_counter = 3;
 
@@ -505,8 +555,10 @@ int main(void) {
                     // Handle enemy spawning
                     enemy_spawn_timer += delta_time;
                     if (enemy_spawn_timer >= enemy_spawn_interval && path_found) {
-                        spawnEnemy(spawn_position);
+                        EnemyType type = (spawn_counter % 2 == 0) ? ENEMY_TANK : ENEMY_SOLDIER;
+                        spawnEnemy(spawn_position, type);
                         enemy_spawn_timer = 0;
+                        spawn_counter++;
                     }
                     
                     updateEnemies(delta_time, info);
