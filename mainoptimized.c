@@ -469,8 +469,9 @@ int main(void) {
 
     InitWindow(screen_width, screen_height, "Tower Defense");
     SetTargetFPS(60);
+    hp = 10;
 
-    GameScreen current_screen = LOGO;
+    GameScreen current_screen = GAMEPLAY;
     Vector2 enemy_pos = {200, 200};
     Vector2 mouse_point = { 0.0f, 0.0f };
     
@@ -495,6 +496,23 @@ int main(void) {
     UnloadImage(image);
     
     PathInfo info[MAP_HEIGHT][MAP_WIDTH] = { 0 };
+    initEnemies();
+    
+    tiles[4][4].type = WALL;
+    overlayTiles[4][4].active = true;
+    overlayTiles[4][4].texture_x_body = 19;
+    overlayTiles[4][4].texture_y_body = 7;
+
+    overlayTiles[4][4].texture_x_cannon = 20;
+    overlayTiles[4][4].texture_y_cannon = 8;
+
+    tiles[9][5].type = WALL;
+    overlayTiles[9][5].active = true;
+    overlayTiles[9][5].texture_x_body = 19;
+    overlayTiles[9][5].texture_y_body = 7;
+
+    overlayTiles[9][5].texture_x_cannon = 20;
+    overlayTiles[9][5].texture_y_cannon = 8;
     
     while (!WindowShouldClose()) { 
         float delta_time = GetFrameTime();
@@ -520,7 +538,7 @@ int main(void) {
                     current_screen = ENDING;
                 }
                 if (hp == 0){
-                    current_screen = ENDING;
+                    CloseWindow();
                 }
             } break;
             case ENDING:
@@ -555,6 +573,8 @@ int main(void) {
                 } break;
                 case GAMEPLAY:
                 {
+                    
+                    
                     int texture_index_x = 0;
                     int texture_index_y = 0;
                     int x, y;
