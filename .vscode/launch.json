@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Launch MyGame",
             "program": "${workspaceFolder}/MyGame.exe",
-            "preLaunchTask": "C/C++: zig.exe build active file"
+            "preLaunchTask": "C/C++: Clang build active file"
         }      
     ]
 }
