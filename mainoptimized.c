@@ -315,9 +315,9 @@ void update_tower_rotation(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH], overlay_t overl
                         angle = -angle;  // Up is negative y
                     }
                     overlayTiles[i][j].cannon_rotation = angle + 90.0f;
-                    printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f\n",
-                           tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
-                           direction.x, direction.y, angle);
+                    // printf("Tower at (%f, %f), Target at (%f, %f), Direction (%f, %f), Angle: %f\n",
+                    //        tower_pos.x, tower_pos.y, target_pos.x, target_pos.y,
+                    //        direction.x, direction.y, angle);
                 }
 
                 fire_timer[i][j] += delta_time;
@@ -468,7 +468,7 @@ int main(void) {
     }
 
     InitWindow(screen_width, screen_height, "Tower Defense");
-    SetTargetFPS(60);
+    // SetTargetFPS(60);
     hp = 10;
 
     GameScreen current_screen = GAMEPLAY;
