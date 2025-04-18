@@ -20,10 +20,15 @@ bool findPath(tiles_t tiles[MAP_HEIGHT][MAP_WIDTH],
               Point *path, int *path_length) {
     
     // Convert start and goal positions to grid coordinates
-    int start_x = (int)(start.x / TILE_WIDTH);
-    int start_y = (int)(start.y / TILE_HEIGHT);
-    int goal_x = (int)(goal.x / TILE_WIDTH);
-    int goal_y = (int)(goal.y / TILE_HEIGHT);
+    // int start_x = (int)(start.x * 0.015625f);
+    // int start_y = (int)(start.y * 0.015625f);
+    // int goal_x = (int)(goal.x * 0.015625f);
+    // int goal_y = (int)(goal.y * 0.015625f);
+
+    int start_x = (int)(start.x) >> 6;
+    int start_y = (int)(start.y) >> 6;
+    int goal_x  = (int)(goal.x)  >> 6;
+    int goal_y  = (int)(goal.y)  >> 6;
     
     // Check bounds
     if (start_x < 0 || start_x >= MAP_WIDTH || start_y < 0 || start_y >= MAP_HEIGHT ||

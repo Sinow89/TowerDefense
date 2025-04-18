@@ -52,7 +52,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# End of https://www.toptal.com/developers/gitignore/api/c  
+# End of https://www.toptal.com/developers/gitignore/api/c 
+TowerDefense/
 TowerDefense/TowerDefense.vtuneproj
 TowerDefense/r000ps/.norun
 TowerDefense/r000ps/r000ps.vtune
