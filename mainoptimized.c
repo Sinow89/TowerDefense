@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include "raylib.h"
-#include "bfs.h"
+#include "bfsopt.h"
 #include "map.h"
 #include "tower.h"
 
